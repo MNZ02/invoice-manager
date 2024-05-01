@@ -11,8 +11,8 @@
           "method": "POST",
           "header": [],
           "body": {
-            "mode": "json",
-            "raw": {"businessName": "Your Business Name","email": "test@example.com","contact": "1234567890","bankName": "Your Bank Name","bankAccountNumber": "Your Account Number","ifscCode": "Your IFSC Code","GST": "Your GST Number","address": "Your Business Address","bankAccountHolderName": "Account Holder Name"}
+            "mode": "raw",
+            "raw": "{\"businessName\": \"Your Business Name\",\"email\": \"test@example.com\",\"contact\": \"1234567890\",\"bankName\": \"Your Bank Name\",\"bankAccountNumber\": \"Your Account Number\",\"ifscCode\": \"Your IFSC Code\",\"GST\": \"Your GST Number\",\"address\": \"Your Business Address\",\"bankAccountHolderName\": \"Account Holder Name\"}"
           },
           "url": {
             "raw": "http://localhost:5400/api/users",
@@ -76,8 +76,8 @@
           "method": "PUT",
           "header": [],
           "body": {
-            "mode": "json",
-            "raw": {"businessName": "Updated Business Name","email": "updated@example.com","contact": "9876543210","bankName": "Updated Bank Name","bankAccountNumber": "Updated Account Number","ifscCode": "Updated IFSC Code","GST": "Updated GST Number","address": "Updated Business Address","bankAccountHolderName": "Updated Account Holder Name"}
+            "mode": "raw",
+            "raw": "{\"businessName\": \"Updated Business Name\",\"email\": \"updated@example.com\",\"contact\": \"9876543210\",\"bankName\": \"Updated Bank Name\",\"bankAccountNumber\": \"Updated Account Number\",\"ifscCode\": \"Updated IFSC Code\",\"GST\": \"Updated GST Number\",\"address\": \"Updated Business Address\",\"bankAccountHolderName\": \"Updated Account Holder Name\"}"
           },
           "url": {
             "raw": "http://localhost:5400/api/users/:id",
@@ -122,8 +122,8 @@
           "method": "POST",
           "header": [],
           "body": {
-            "mode": "json",
-            "raw": {"name": "Plan Name","description": "Plan Description","price": 99.99}
+            "mode": "raw",
+            "raw": "{\"name\": \"Plan Name\",\"description\": \"Plan Description\",\"price\": 99.99}"
           },
           "url": {
             "raw": "http://localhost:5400/api/plans",
@@ -187,8 +187,8 @@
           "method": "PUT",
           "header": [],
           "body": {
-            "mode": "json",
-            "raw": {"name": "Updated Plan Name","description": "Updated Plan Description","price": 129.99}
+            "mode": "raw",
+            "raw": "{\"name\": \"Updated Plan Name\",\"description\": \"Updated Plan Description\",\"price\": 129.99}"
           },
           "url": {
             "raw": "http://localhost:5400/api/plans/:id",
@@ -214,7 +214,7 @@
           "url": {
             "raw": "http://localhost:5400/api/plans/:id",
             "protocol": "http",
-            "host": [ 
+            "host": [
               "localhost"
             ],
             "port": "5400",
@@ -233,8 +233,8 @@
           "method": "POST",
           "header": [],
           "body": {
-            "mode": "json",
-            "raw": {"items": [{"name": "Item 1","quantity": 2,"price": 10},{"name": "Item 2","quantity": 1,"price": 20}],"totalAmount": 40,"additionalNotes": "Optional additional notes","invoiceNumber": "INV001","invoiceDate": "2024-04-30","clientName": "Client Name","clientAddress": "Client Address"}
+            "mode": "raw",
+            "raw": "{\"items\": [{\"name\": \"Item 1\",\"quantity\": 2,\"price\": 10},{\"name\": \"Item 2\",\"quantity\": 1,\"price\": 20}],\"totalAmount\": 40,\"additionalNotes\": \"Optional additional notes\",\"invoiceNumber\": \"INV001\",\"invoiceDate\": \"2024-04-30\",\"clientName\": \"Client Name\",\"clientAddress\": \"Client Address\"}"
           },
           "url": {
             "raw": "http://localhost:5400/api/invoices",
@@ -298,8 +298,8 @@
           "method": "PUT",
           "header": [],
           "body": {
-            "mode": "json",
-            "raw": {"items": [{"name": "Updated Item 1","quantity": 3,"price": 15},{"name": "Updated Item 2","quantity": 2,"price": 25}],"totalAmount": 70,"additionalNotes": "Updated optional additional notes","clientName": "Updated Client Name","clientAddress": "Updated Client Address"}
+            "mode": "raw",
+            "raw": "{\"items\": [{\"name\": \"Updated Item 1\",\"quantity\": 3,\"price\": 15},{\"name\": \"Updated Item 2\",\"quantity\": 2,\"price\": 25}],\"totalAmount\": 70,\"additionalNotes\": \"Updated optional additional notes\",\"clientName\": \"Updated Client Name\",\"clientAddress\": \"Updated Client Address\"}"
           },
           "url": {
             "raw": "http://localhost:5400/api/invoices/:id",
@@ -344,8 +344,8 @@
           "method": "POST",
           "header": [],
           "body": {
-            "mode": "json",
-            "raw": {"planId": "plan_id_here"}
+            "mode": "raw",
+            "raw": "{\"planId\": \"plan_id_here\"}"
           },
           "url": {
             "raw": "http://localhost:5400/api/subscriptions",
@@ -409,8 +409,8 @@
           "method": "PUT",
           "header": [],
           "body": {
-            "mode": "json",
-            "raw": {"planId": "updated_plan_id_here"}
+            "mode": "raw",
+            "raw": "{\"planId\": \"updated_plan_id_here\"}"
           },
           "url": {
             "raw": "http://localhost:5400/api/subscriptions/:id",
