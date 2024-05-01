@@ -12,7 +12,7 @@
           "header": [],
           "body": {
             "mode": "json",
-            "json": "{"businessName": "Your Business Name","email": "test@example.com","contact": "1234567890","bankName": "Your Bank Name","bankAccountNumber": "Your Account Number","ifscCode": "Your IFSC Code","GST": "Your GST Number","address": "Your Business Address","bankAccountHolderName": "Account Holder Name"}"
+            "raw": {"businessName": "Your Business Name","email": "test@example.com","contact": "1234567890","bankName": "Your Bank Name","bankAccountNumber": "Your Account Number","ifscCode": "Your IFSC Code","GST": "Your GST Number","address": "Your Business Address","bankAccountHolderName": "Account Holder Name"}
           },
           "url": {
             "raw": "http://localhost:5400/api/users",
