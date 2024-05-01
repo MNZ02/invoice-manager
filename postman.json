@@ -214,7 +214,7 @@
           "url": {
             "raw": "http://localhost:5400/api/plans/:id",
             "protocol": "http",
-            "host": [
+            "host": [ 
               "localhost"
             ],
             "port": "5400",
