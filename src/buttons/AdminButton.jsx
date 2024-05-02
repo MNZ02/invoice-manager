@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function AdminButton () {
   return (
-    <Link to='/admin'>
+    <Link to='/auth/signup'>
       <div>
         <button className='bg-blue-500 text-white px-3 py-2 rounded-md hover:bg-blue-600 hover:ring-4 hover:ring-blue-400 shadow-lg'>
           Admin

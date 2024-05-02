@@ -7,11 +7,13 @@ import AuthContext from './context/auth'
 import { Header, Footer, Error } from './pages'
 import ThankYou from './pages/ThankYou'
 import Cancelled from './pages/Cancelled'
+import SignIn from './pages/Authentication/SignIn'
+import SignUp from './pages/Authentication/SignUp'
 import { store } from './store'
 import { Provider } from 'react-redux'
 import StateContext, { State } from './context/stateContext'
 
-export default function App() {
+export default function App () {
   const user = true
 
   return (
@@ -44,6 +46,22 @@ export default function App() {
             {/* <Route path="/cancelled" element={<Cancelled />}></Route> */}
             <Route path='*' element={<Invoice />}></Route>
             <Route path='/admin' element={<ECommerce />} />
+            <Route
+              path='/auth/signin'
+              element={
+                <>
+                  <SignIn />
+                </>
+              }
+            />
+            <Route
+              path='/auth/signup'
+              element={
+                <>
+                  <SignUp />
+                </>
+              }
+            />
           </Routes>
         </State.Provider>
       </BrowserRouter>
