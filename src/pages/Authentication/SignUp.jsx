@@ -1,20 +1,39 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumbs'
 import LogoDark from '../../images/logo/logo-dark.svg'
 import Logo from '../../images/logo/logo.svg'
 import { useForm } from 'react-hook-form'
+import axios from 'axios'
 
 const SignUp = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues
+    getValues,
+    reset
   } = useForm()
 
-  const onSubmit = data => {
-    console.log(data)
+  const navigate = useNavigate()
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState(null)
+
+  const onSubmit = async data => {
+    setSubmitting(true)
+
+    try {
+      const response = await axios.post('http://localhost:3000/signup', data)
+      console.log('Form submission succesfull', response.data)
+      navigate('/admin')
+    } catch (error) {
+      console.error('Error submitting form', error.message)
+      setSubmitError('Error submitting form, Please try again later')
+    } finally {
+      setSubmitting(false)
+      setSubmitError(null)
+      reset()
+    }
   }
 
   return (
@@ -174,14 +193,22 @@ const SignUp = () => {
                     </label>
                     <div className='relative'>
                       <input
-                        {...register('name', { required: true })}
+                        {...register('name', {
+                          required: true,
+                          message: 'Name is required',
+                          pattern: {
+                            value: /^[a-zA-Z\s]*$/,
+                            message: 'Name can only contain letters'
+                          }
+                        })}
                         type='text'
                         placeholder='Enter your full name'
+                        disabled={submitting}
                         className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                       />
                       {errors.name && (
                         <p className='text-red-500 text-sm mt-1'>
-                          Name is required
+                          {errors.name.message}
                         </p>
                       )}
 
@@ -224,6 +251,7 @@ const SignUp = () => {
                           }
                         })}
                         type='email'
+                        disabled={submitting}
                         placeholder='Enter your email'
                         className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                       />
@@ -265,18 +293,19 @@ const SignUp = () => {
                             value: 6,
                             message: 'Password must be at least 6 characters'
                           },
-                            maxLength: {
-                                value: 20,
-                                message: 'Password must not exceed 20 characters'
-                            }
+                          maxLength: {
+                            value: 20,
+                            message: 'Password must not exceed 20 characters'
+                          }
                         })}
                         type='password'
                         placeholder='Enter your password'
+                        disabled={submitting}
                         className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                       />
                       {errors.password && (
                         <p className='text-red-500 text-sm mt-1'>
-                         {errors.password.message}
+                          {errors.password.message}
                         </p>
                       )}
 
@@ -313,7 +342,7 @@ const SignUp = () => {
                         {...register('retypePassword', {
                           required: true,
                           validate: {
-                            matchesPassword: (value) => {
+                            matchesPassword: value => {
                               const { password } = getValues()
                               return (
                                 password === value || 'Passwords does not match'
@@ -324,6 +353,7 @@ const SignUp = () => {
                         })}
                         type='password'
                         placeholder='Re-enter your password'
+                        disabled={submitting}
                         className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                       />
                       {errors.retypePassword && (
@@ -358,9 +388,13 @@ const SignUp = () => {
                   <div className='mb-5'>
                     <input
                       type='submit'
+                      disabled={submitting}
                       value='Create account'
                       className='w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90'
                     />
+                    {submitError && (
+                      <p className='text-red-500'>{submitError}</p>
+                    )}
                   </div>
 
                   <button className='flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50'>

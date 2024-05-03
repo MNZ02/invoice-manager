@@ -1,11 +1,38 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumbs'
 import LogoDark from '../../images/logo/logo-dark.svg'
 import Logo from '../../images/logo/logo.svg'
-import DefaultLayout from '../../layout/DefaultLayout'
+import axios from 'axios'
 
 const SignIn = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm()
+
+  const navigate = useNavigate()
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState(null)
+
+  const onSubmit = async data => {
+    setSubmitting(true)
+
+    try {
+      const response = await axios.post('http://localhost:3000/signin', data)
+      console.log('Login successful', response.data)
+      navigate('/admin')
+    } catch (error) {
+      console.error('Login failed', error.message)
+      setSubmitError('Login failed. Please try again.')
+    } finally {
+      setSubmitting(false)
+      reset()
+    }
+  }
   return (
     <div className='xl:flex xl:justify-center'>
       <div className='xl:w-3/4 mx-4 my-2 px-4 py-2'>
@@ -157,17 +184,24 @@ const SignIn = () => {
                   Sign In to TailAdmin
                 </h2>
 
-                <form>
+                <form onSubmit={handleSubmit(onSubmit)}>
                   <div className='mb-4'>
                     <label className='mb-2.5 block font-medium text-black dark:text-white'>
                       Email
                     </label>
                     <div className='relative'>
                       <input
+                        {...register('email', { required: true })}
                         type='email'
                         placeholder='Enter your email'
+                        disabled={submitting}
                         className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                       />
+                      {errors.email && (
+                        <p className='text-red-500 text-sm mt-1'>
+                          Email is required
+                        </p>
+                      )}
 
                       <span className='absolute right-4 top-4'>
                         <svg
@@ -191,14 +225,31 @@ const SignIn = () => {
 
                   <div className='mb-6'>
                     <label className='mb-2.5 block font-medium text-black dark:text-white'>
-                      Re-type Password
+                      Password
                     </label>
                     <div className='relative'>
                       <input
+                        {...register('password', {
+                          required: true,
+                          minLength: {
+                            value: 6,
+                            message: 'Password must have at least 6 characters'
+                          },
+                          maxLength: {
+                            value: 20,
+                            message: 'Password must have at most 20 characters'
+                          }
+                        })}
                         type='password'
-                        placeholder='6+ Characters, 1 Capital letter'
+                        placeholder='6+ Characters'
+                        disabled={submitting}
                         className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                       />
+                      {errors.password && (
+                        <p className='text-red-500 text-sm mt-1'>
+                          {errors.password.message}
+                        </p>
+                      )}
 
                       <span className='absolute right-4 top-4'>
                         <svg
@@ -223,15 +274,18 @@ const SignIn = () => {
                       </span>
                     </div>
                   </div>
-                  <Link to='/admin'>
-                    <div className='mb-5'>
-                      <input
-                        type='submit'
-                        value='Sign In'
-                        className='w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90'
-                      />
-                    </div>
-                  </Link>
+
+                  <div className='mb-5'>
+                    <input
+                      type='submit'
+                      value='Sign In'
+                      disabled={submitting}
+                      className='w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90'
+                    />
+                    {submitError && (
+                      <p className='text-red-500'>{submitError}</p>
+                    )}
+                  </div>
 
                   <button className='flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50'>
                     <span>

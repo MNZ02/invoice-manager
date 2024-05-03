@@ -8,13 +8,11 @@ import eyeSvg from '../../images/card-images/eye.svg'
 import cartSvg from '../../images/card-images/cart.svg'
 import productSvg from '../../images/card-images/product.svg'
 import usersSvg from '../../images/card-images/users.svg'
-import DefaultLayout from '../../layout/DefaultLayout';
-
+import DefaultLayout from '../../layout/DefaultLayout'
 
 const ECommerce = () => {
   return (
     <DefaultLayout>
-
       <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5'>
         <CardDataStats title='Total views' total='$3.456K' rate='0.43%' levelUp>
           <img className='w-6' src={eyeSvg} alt='eye-icon' />
