@@ -23,7 +23,10 @@ const SignUp = () => {
     setSubmitting(true)
 
     try {
-      const response = await axios.post('http://localhost:3000/signup', data)
+      const response = await axios.post(
+        import.meta.env.VITE_REACT_API_ENDPOINT + '/api/register/admin',
+        data
+      )
       console.log('Form submission succesfull', response.data)
       navigate('/admin')
     } catch (error) {
@@ -189,20 +192,20 @@ const SignUp = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className='mb-4'>
                     <label className='mb-2.5 block font-medium text-black dark:text-white'>
-                      Name
+                      Business name
                     </label>
                     <div className='relative'>
                       <input
-                        {...register('name', {
+                        {...register('businessName', {
                           required: true,
-                          message: 'Name is required',
+                          message: 'Business name is required',
                           pattern: {
                             value: /^[a-zA-Z\s]*$/,
                             message: 'Name can only contain letters'
                           }
                         })}
                         type='text'
-                        placeholder='Enter your full name'
+                        placeholder='Enter Business name'
                         disabled={submitting}
                         className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                       />

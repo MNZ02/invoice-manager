@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.6.8",
     "collect.js": "^4.36.1",
+    "dotenv": "^16.4.5",
     "formik": "^2.4.6",
     "netlify-identity-widget": "^1.9.2",
     "react": "^18.2.0",

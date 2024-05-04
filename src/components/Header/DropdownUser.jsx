@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import UserOne from '../../images/user/user-01.png'
 
@@ -8,7 +8,7 @@ const DropdownUser = () => {
 
   const trigger = useRef(null)
   const dropdown = useRef(null)
-
+  const navigate = useNavigate()
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -35,6 +35,10 @@ const DropdownUser = () => {
     return () => document.removeEventListener('keydown', keyHandler)
   })
 
+  const handleLogout = () => {
+    localStorage.removeItem('userToken')
+    navigate('/auth/signin')
+  }
   return (
     <div className='relative'>
       <Link
@@ -153,7 +157,10 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className='flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base'>
+        <button
+          onClick={handleLogout}
+          className='flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base'
+        >
           <svg
             className='fill-current'
             width='22'

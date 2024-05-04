@@ -22,7 +22,11 @@ const SignIn = () => {
     setSubmitting(true)
 
     try {
-      const response = await axios.post('http://localhost:3000/signin', data)
+      const response = await axios.post(
+        import.meta.env.VITE_REACT_API_ENDPOINT + '/api/login/admin',
+        data
+      )
+
       console.log('Login successful', response.data)
       navigate('/admin')
     } catch (error) {
