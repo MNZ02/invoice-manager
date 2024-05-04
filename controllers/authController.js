@@ -4,6 +4,7 @@ const { JWT_SECRET_KEY } = require("../config");
 const User = require("../models/User");
 
 // Login function with validation and error handling
+<<<<<<< HEAD
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -38,3 +39,5 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+=======
+>>>>>>> f9f7814df16a70c8194c53a1480417fe17d2a263

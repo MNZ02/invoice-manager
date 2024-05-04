@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "bcrypt": "^5.1.1",
+>>>>>>> f9f7814df16a70c8194c53a1480417fe17d2a263
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
