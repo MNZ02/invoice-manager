@@ -20,7 +20,6 @@ export default function App () {
     <Provider store={store}>
       <BrowserRouter>
         <ScrollToTop />
-        <Header />
         <State.Provider value={State}>
           <Routes>
             <Route
@@ -29,9 +28,13 @@ export default function App () {
                 <React.Fragment>
                   {/* <Invoice /> */}
                   {user ? (
-                    <Invoice />
+                    <>
+                      <Header />
+                      <Invoice />
+                    </>
                   ) : (
                     <React.Fragment>
+                      <Header />
                       <Home />
                       <CallToAction />
                       <Footer />
