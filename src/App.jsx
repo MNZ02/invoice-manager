@@ -12,6 +12,8 @@ import SignUp from './pages/Authentication/SignUp'
 import { store } from './store'
 import { Provider } from 'react-redux'
 import StateContext, { State } from './context/stateContext'
+import Tables from './pages/Tables'
+import ProtectedRoutes from './components/ProtectedRoute/ProtectedRoute'
 
 export default function App () {
   const user = true
@@ -47,8 +49,11 @@ export default function App () {
             {/* <Route path="/suggestion-box" element={<SuggestionBox />}></Route> */}
             {/* <Route path="/thank-you" element={<ThankYou />}></Route> */}
             {/* <Route path="/cancelled" element={<Cancelled />}></Route> */}
-            <Route path='*' element={<Invoice />}></Route>
-            <Route path='/admin' element={<ECommerce />} />
+            <Route path='/' element={<Invoice />}></Route>
+            <Route element={<ProtectedRoutes />}>
+              <Route path='/admin' element={<ECommerce />} />
+              <Route path='/admin/tables' element={<Tables />} />
+            </Route>
             <Route
               path='/auth/signin'
               element={

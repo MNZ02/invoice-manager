@@ -83,7 +83,8 @@ function TableTwo () {
 
   return (
     <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default my-4'>
-      <div className='p-2 block max-w-full overflow-x-scroll overflow-y-hidden'>
+      <h1 className='font-bold text-xl my-2 px-2'>User Table</h1>
+      <div className='p-2 block max-w-full overflow-y-hidden'>
         <div className='h-2' />
         <table className='w-full '>
           <thead>
@@ -190,14 +191,14 @@ function TableTwo () {
         <div>{table.getRowModel().rows.length} Rows</div>
       </div>
 
-      <hr />
+      {/* <hr />
       <div>
         <button onClick={() => rerender()}>Force Rerender</button>
       </div>
       <div>
         <button onClick={() => refreshData()}>Refresh Data</button>
       </div>
-      <pre>{JSON.stringify(pagination, null, 2)}</pre>
+      <pre>{JSON.stringify(pagination, null, 2)}</pre> */}
     </div>
   )
 }
