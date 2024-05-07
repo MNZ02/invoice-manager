@@ -10,12 +10,18 @@ const range = len => {
 
 const newPerson = () => {
   return {
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    age: faker.number.int(40),
-    visits: faker.number.int(1000),
-    progress: faker.number.int(100),
-    status: faker.helpers.shuffle(['relationship', 'complicated', 'single'])[0]
+    // firstName: faker.person.firstName(),
+    // lastName: faker.person.lastName(),
+    // age: faker.number.int(40),
+    // visits: faker.number.int(1000),
+    // progress: faker.number.int(100),
+    // status: faker.helpers.shuffle(['relationship', 'complicated', 'single'])[0]
+    firstName: 'John',
+    lastName: 'Doe',
+    age: 32,
+    visits: 1000,
+    progress: 100,
+    status: 'relationship'
   }
 }
 

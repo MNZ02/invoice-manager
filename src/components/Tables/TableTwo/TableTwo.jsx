@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './index.css'
+import editSvg from '../../../images/user-table-buttons/edit.svg'
+import deleteSvg from '../../../images/user-table-buttons/delete.svg'
 import {
   useReactTable,
   getCoreRowModel,
@@ -61,8 +63,9 @@ function TableTwo () {
     []
   )
 
-  const [data, setData] = React.useState(() => makeData(100000))
+  const [data, setData] = React.useState(() => makeData(1))
   const refreshData = () => setData(() => makeData(100000))
+  const [editRowId, setEditRowId] = useState(null)
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
@@ -80,6 +83,30 @@ function TableTwo () {
     getPaginationRowModel: getPaginationRowModel(),
     debugTable: true
   })
+
+  const handleEdit = row => {
+    setEditRowId(row.id)
+  }
+
+  const handleSave = () => {
+    setEditRowId(null)
+    console.log('Edited data', editRowId)
+  }
+
+  const handleChange = (e, row) => {
+    const { name, value } = e.target
+    const updatedData = data.map(item => {
+      if (item === row.original) {
+        return { ...item, [name]: value }
+      }
+      return item
+    })
+    setData(updatedData)
+  }
+
+  const handleDelete = row => {
+    setData(prevData => prevData.filter(data => data !== row.original))
+  }
 
   return (
     <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default my-4'>
@@ -114,13 +141,44 @@ function TableTwo () {
                   {row.getVisibleCells().map(cell => {
                     return (
                       <td key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
+                        {editRowId === row.id ? (
+                          <input
+                            type='text'
+                            name={cell.column.id}
+                            value={row.original[cell.column.id]}
+                            onChange={e => handleChange(e, row)}
+                          />
+                        ) : (
+                          <div>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </div>
                         )}
                       </td>
                     )
                   })}
+                  <td>
+                    {editRowId === row.id ? (
+                      <button onClick={handleSave}>Save</button>
+                    ) : (
+                      <div className='flex space-x-4'>
+                        <img
+                          onClick={() => handleEdit(row)}
+                          className='w-5 cursor-pointer'
+                          src={editSvg}
+                          alt='edit'
+                        />
+                        <img
+                          onClick={() => handleDelete(row)}
+                          className='w-5 cursor-pointer'
+                          src={deleteSvg}
+                          alt='delete'
+                        />
+                      </div>
+                    )}
+                  </td>
                 </tr>
               )
             })}
