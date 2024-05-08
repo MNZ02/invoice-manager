@@ -63,7 +63,7 @@ function TableTwo () {
     []
   )
 
-  const [data, setData] = React.useState(() => makeData(1))
+  const [data, setData] = React.useState(() => makeData(10000))
   const refreshData = () => setData(() => makeData(100000))
   const [editRowId, setEditRowId] = useState(null)
 
@@ -131,6 +131,7 @@ function TableTwo () {
                     </th>
                   )
                 })}
+                <th>Actions</th>
               </tr>
             ))}
           </thead>
@@ -161,7 +162,9 @@ function TableTwo () {
                   })}
                   <td>
                     {editRowId === row.id ? (
-                      <button onClick={handleSave}>Save</button>
+                      <div>
+                        <button onClick={handleSave}>Save</button>
+                      </div>
                     ) : (
                       <div className='flex space-x-4'>
                         <img

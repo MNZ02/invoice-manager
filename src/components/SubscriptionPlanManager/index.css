@@ -1,0 +1,52 @@
+.subscription-plan-manager {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  @media screen and (max-width: 600px) {
+    /* Make table responsive on small screens */
+    th, td {
+      padding: 6px;
+      font-size: 12px;
+    }
+  
+    /* Hide table header on small screens */
+    th {
+      display: none;
+    }
+  
+    /* Show table header in the first row of tbody on small screens */
+    td:before {
+      content: attr(data-th);
+      font-weight: bold;
+      display: block;
+    }
+  
+    /* Adjust input size on small screens */
+    input[type="text"], input[type="number"] {
+      width: 100%;
+    }
+  }
+  

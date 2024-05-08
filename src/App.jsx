@@ -14,6 +14,8 @@ import { Provider } from 'react-redux'
 import StateContext, { State } from './context/stateContext'
 import Tables from './pages/Tables'
 import ProtectedRoutes from './components/ProtectedRoute/ProtectedRoute'
+import SubscriptionPlanManager from './components/SubscriptionPlanManager/SubscriptionPlanManager'
+import Plans from './pages/Plans'
 
 export default function App () {
   const user = true
@@ -52,7 +54,8 @@ export default function App () {
             <Route path='/' element={<Invoice />}></Route>
             <Route element={<ProtectedRoutes />}>
               <Route path='/admin' element={<ECommerce />} />
-              <Route path='/admin/tables' element={<Tables />} />
+              <Route path='/admin/users/tables' element={<Tables />} />
+              <Route path='/admin/plans' element={<Plans />} />
             </Route>
             <Route
               path='/auth/signin'
