@@ -14,8 +14,11 @@ import { Provider } from 'react-redux'
 import StateContext, { State } from './context/stateContext'
 import Tables from './pages/Tables'
 import ProtectedRoutes from './components/ProtectedRoute/ProtectedRoute'
-import SubscriptionPlanManager from './components/SubscriptionPlanManager/SubscriptionPlanManager'
 import Plans from './pages/Plans'
+import UserDashboard from './pages/Dashboard/UserDashboard'
+import UserHistory from './pages/UserHistory'
+import Settings from './pages/Settings'
+import Profile from './pages/Profile'
 
 export default function App () {
   const user = true
@@ -33,15 +36,17 @@ export default function App () {
                   {/* <Invoice /> */}
                   {user ? (
                     <>
-                      <Header />
-                      <Invoice />
+                      <UserDashboard />
+                      {/* <Header />
+                      <Invoice /> */}
                     </>
                   ) : (
                     <React.Fragment>
-                      <Header />
+                      <UserDashboard />
+                      {/* <Header />
                       <Home />
                       <CallToAction />
-                      <Footer />
+                      <Footer /> */}
                     </React.Fragment>
                   )}
                 </React.Fragment>
@@ -56,6 +61,13 @@ export default function App () {
               <Route path='/admin' element={<ECommerce />} />
               <Route path='/admin/users/tables' element={<Tables />} />
               <Route path='/admin/plans' element={<Plans />} />
+              <Route path='/users/dashboard' element={<UserDashboard />} />
+              <Route
+                path='/users/dashboard/history'
+                element={<UserHistory />}
+              />
+              <Route path='/users/dashboard/profile' element={<Profile />} />
+              <Route path='/users/dashboard/settings' element={<Settings />} />
             </Route>
             <Route
               path='/auth/signin'
