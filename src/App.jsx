@@ -36,7 +36,7 @@ export default function App () {
                   {/* <Invoice /> */}
                   {user ? (
                     <>
-                      <UserDashboard />
+                      <SignUp />
                       {/* <Header />
                       <Invoice /> */}
                     </>

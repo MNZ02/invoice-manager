@@ -28,7 +28,7 @@ const SignIn = () => {
       )
 
       console.log('Login successful', response.data)
-      navigate('/admin')
+      navigate('/users/dashboard')
     } catch (error) {
       console.error('Login failed', error.message)
       setSubmitError('Login failed. Please try again.')

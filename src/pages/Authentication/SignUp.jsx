@@ -28,7 +28,7 @@ const SignUp = () => {
         data
       )
       console.log('Form submission succesfull', response.data)
-      navigate('/admin')
+      navigate('/users/dashboard')
     } catch (error) {
       console.error('Error submitting form', error.message)
       setSubmitError('Error submitting form, Please try again later')
