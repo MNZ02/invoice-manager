@@ -19,6 +19,7 @@ import UserDashboard from './pages/Dashboard/UserDashboard'
 import UserHistory from './pages/UserHistory'
 import Settings from './pages/Settings'
 import Profile from './pages/Profile'
+import CreateInvoice from './pages/CreateInvoice'
 
 export default function App () {
   const user = true
@@ -68,6 +69,10 @@ export default function App () {
               />
               <Route path='/users/dashboard/profile' element={<Profile />} />
               <Route path='/users/dashboard/settings' element={<Settings />} />
+              <Route
+                path='/users/dashboard/create-invoice'
+                element={<CreateInvoice />}
+              />
             </Route>
             <Route
               path='/auth/signin'

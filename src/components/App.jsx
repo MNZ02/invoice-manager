@@ -66,6 +66,7 @@ function App () {
                     autoComplete='off'
                     value={name}
                     onChange={e => setName(e.target.value)}
+                    className='p-2'
                   />
                 </div>
 
@@ -80,6 +81,7 @@ function App () {
                     maxLength={96}
                     value={address}
                     onChange={e => setAddress(e.target.value)}
+                    className='p-2'
                   />
                 </div>
               </article>
@@ -96,6 +98,7 @@ function App () {
                     autoComplete='off'
                     value={email}
                     onChange={e => setEmail(e.target.value)}
+                    className='p-2'
                   />
                 </div>
 
@@ -110,6 +113,7 @@ function App () {
                     autoComplete='off'
                     value={website}
                     onChange={e => setWebsite(e.target.value)}
+                    className='p-2'
                   />
                 </div>
 
@@ -124,6 +128,7 @@ function App () {
                     autoComplete='off'
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
+                    className='p-2'
                   />
                 </div>
               </article>
@@ -140,6 +145,7 @@ function App () {
                     autoComplete='off'
                     value={bankName}
                     onChange={e => setBankName(e.target.value)}
+                    className='p-2'
                   />
                 </div>
 
@@ -156,6 +162,7 @@ function App () {
                     autoComplete='off'
                     value={bankAccount}
                     onChange={e => setBankAccount(e.target.value)}
+                    className='p-2'
                   />
                 </div>
               </article>
@@ -172,6 +179,7 @@ function App () {
                     autoComplete='off'
                     value={clientName}
                     onChange={e => setClientName(e.target.value)}
+                    className='p-2'
                   />
                 </div>
 
@@ -188,6 +196,7 @@ function App () {
                     autoComplete='off'
                     value={clientAddress}
                     onChange={e => setClientAddress(e.target.value)}
+                    className='p-2'
                   />
                 </div>
               </article>
@@ -203,6 +212,7 @@ function App () {
                     autoComplete='off'
                     value={invoiceNumber}
                     onChange={e => setInvoiceNumber(e.target.value)}
+                    className='p-2'
                   />
                 </div>
 
@@ -216,6 +226,7 @@ function App () {
                     autoComplete='off'
                     value={invoiceDate}
                     onChange={e => setInvoiceDate(e.target.value)}
+                    className='p-2'
                   />
                 </div>
 
@@ -229,6 +240,7 @@ function App () {
                     autoComplete='off'
                     value={dueDate}
                     onChange={e => setDueDate(e.target.value)}
+                    className='p-2'
                   />
                 </div>
               </article>
@@ -248,6 +260,7 @@ function App () {
                 maxLength={500}
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
+                className='p-2'
               ></textarea>
             </div>
           </div>

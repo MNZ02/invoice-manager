@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import editSvg from '../../images/user-table-buttons/edit.svg'
 import deleteSvg from '../../images/user-table-buttons/delete.svg'
 import addSvg from '../../images/Plans/add.svg'
@@ -11,7 +11,7 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { makeData } from './makeData'
+import axios from 'axios'
 
 function SubscriptionPlanManager () {
   const Plans = () => {
@@ -22,13 +22,20 @@ function SubscriptionPlanManager () {
     }
   }
   const [editRowId, setEditRowId] = useState(null)
-  const [data, setData] = useState([
-    {
-      Name: Plans().Name,
-      Description: Plans().Description,
-      Price: Plans().Price
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await axios.get('https://localhost:3000/api/plans')
+        const data = response.json()
+        setData(data)
+      } catch (error) {
+        console.error('Error fetching plans: ', error.message)
+      }
     }
-  ])
+    fetchPlans()
+  }, [])
 
   const handleEdit = row => {
     setEditRowId(row.id)

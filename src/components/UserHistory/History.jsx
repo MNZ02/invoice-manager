@@ -182,7 +182,7 @@ function History () {
 
   return (
     <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default my-4'>
-      <h1 className='font-bold text-xl my-2 px-2'>Invoices</h1>
+      <h1 className='font-bold text-xl my-2 px-2'>Invoices History</h1>
       <div className='p-2 block max-w-full overflow-y-hidden'>
         <div className='h-2' />
         <table className='w-full '>
