@@ -14,21 +14,29 @@ import {
 import axios from 'axios'
 
 function SubscriptionPlanManager () {
-  const Plans = () => {
-    return {
-      Name: 'Basic Plan',
-      Description: 'Pricing Plan',
-      Price: '$10'
-    }
-  }
-  const [editRowId, setEditRowId] = useState(null)
+  const [editRowId, setEditRowId] = useState(0)
   const [data, setData] = useState([])
+
+  const api = axios.create({
+    baseURL: import.meta.env.VITE_REACT_API_ENDPOINT,
+    headers: {
+      'Content-Type': 'application/json',
+
+      Authorization: `${localStorage.getItem('token')}`
+    }
+  })
 
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await axios.get('https://localhost:3000/api/plans')
-        const data = response.json()
+        const response = await api.get('/api/plans')
+        const data = response.data.map(plan => ({
+          id: plan._id,
+          name: plan.name,
+          description: plan.description,
+          price: plan.price
+        }))
+        console.log(data)
         setData(data)
       } catch (error) {
         console.error('Error fetching plans: ', error.message)
@@ -39,17 +47,50 @@ function SubscriptionPlanManager () {
 
   const handleEdit = row => {
     setEditRowId(row.id)
+    console.log(editRowId)
   }
+  const handleSave = async row => {
+    try {
+      // Check if row and row.original are defined
+      if (!row || !row.original) {
+        console.error('Invalid row data')
+        return
+      }
 
-  const handleSave = () => {
-    setEditRowId(null)
-    console.log('Edited data', editRowId)
+      // Find the row in the data array based on its MongoDB ID
+      const updatedRow = data.find(item => item.id === row.original.id)
+
+      // Check if updatedRow is defined
+      if (!updatedRow) {
+        console.error('Row not found in data')
+        return
+      }
+
+      // Make a request to update the document in MongoDB
+      const response = await api.put(`/api/plans/${updatedRow.id}`, updatedRow)
+
+      // Optionally, you can update the local data with the response data from the server
+      // In case the server modifies the data (e.g., adds timestamps)
+      setData(prevData =>
+        prevData.map(item => {
+          if (item.id === updatedRow.id) {
+            return response.data // Update with server response
+          }
+          return item
+        })
+      )
+
+      // Clear the editRowId state to exit edit mode
+      setEditRowId(null)
+    } catch (error) {
+      console.error('Error updating plan:', error.message)
+    }
   }
 
   const handleChange = (e, row) => {
     const { name, value } = e.target
     const updatedData = data.map(item => {
-      if (item === row.original) {
+      if (item.id === row.original.id) {
         return { ...item, [name]: value }
       }
       return item
@@ -57,18 +98,29 @@ function SubscriptionPlanManager () {
     setData(updatedData)
   }
 
-  const handleDelete = row => {
-    setData(prevData => prevData.filter(data => data !== row.original))
+  const handleDelete = async row => {
+    try {
+      setData(prevData => prevData.filter(data => data.id !== row.original.id))
+      const response = await api.delete(`/api/plans/${row.original.id}`)
+      console.log('Response: ', response.data)
+    } catch (error) {
+      console.error('Error deleting plan: ', error.message)
+    }
   }
 
-  const handleAddPlan = () => {
-    const newPlan = {
-      id: data.length + 1,
-      Name: 'New Plan',
-      Description: 'Description',
-      Price: '$0.00'
+  const handleAddPlan = async () => {
+    try {
+      const newPlan = {
+        name: 'Enter New plan',
+        description: 'Enter Description of new plan',
+        price: '0.00'
+      }
+      setData(prevData => [...prevData, newPlan])
+      const response = await api.post('/api/plans', newPlan)
+      console.log('Response: ', response.data)
+    } catch (error) {
+      console.error('Error adding plan: ', error.message)
     }
-    setData(prevData => [...prevData, newPlan])
   }
 
   const rerender = React.useReducer(() => ({}), {})[1]
@@ -76,17 +128,18 @@ function SubscriptionPlanManager () {
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'Name',
+        accessorKey: 'name',
+        header: () => 'Name',
         cell: info => info.getValue(),
         footer: props => props.column.id
       },
       {
-        accessorKey: 'Description',
+        accessorKey: 'description',
         header: () => 'Description',
         footer: props => props.column.id
       },
       {
-        accessorKey: 'Price',
+        accessorKey: 'price',
         header: () => <span>Price</span>,
         footer: props => props.column.id
       }
@@ -216,7 +269,7 @@ function MyTable ({
                 <td>
                   {editRowId === row.id ? (
                     <div>
-                      <button onClick={handleSave}>Save</button>
+                      <button onClick={() => handleSave(row)}>Save</button>
                     </div>
                   ) : (
                     <div className='flex space-x-4'>

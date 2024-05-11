@@ -8,14 +8,6 @@ const range = len => {
   return arr
 }
 
-const newPerson = () => {
-  return {
-    Name: 'Basic Plan',
-    Description: 'Pricing Plan',
-    Price: '$10'
-  }
-}
-
 export function makeData (...lens) {
   const makeDataLevel = (depth = 0) => {
     const len = lens[depth]

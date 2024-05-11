@@ -24,7 +24,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        import.meta.env.VITE_REACT_API_ENDPOINT + '/api/register/admin',
+        import.meta.env.VITE_REACT_API_ENDPOINT + '/api/register',
         data
       )
       console.log('Form submission succesfull', response.data)
@@ -390,25 +390,25 @@ const SignUp = () => {
 
                   <div className='mb-4'>
                     <label className='mb-2.5 block font-medium text-black dark:text-white'>
-                      Plan Id
+                      Contact number
                     </label>
                     <div className='relative'>
                       <input
-                        {...register('planId', {
+                        {...register('contact', {
                           required: true,
                           pattern: {
                             value: /^[0-9]*$/,
-                            message: 'Plan Id is required'
+                            message: 'Contact number is required'
                           }
                         })}
-                        type='text'
-                        placeholder='Enter Plan Id'
+                        type='number'
+                        placeholder='Enter Contact number'
                         disabled={submitting}
                         className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                       />
-                      {errors.planId && (
+                      {errors.contact && (
                         <p className='text-red-500 text-sm mt-1'>
-                          {errors.planId.message}
+                          {errors.contact.message}
                         </p>
                       )}
 
@@ -436,6 +436,263 @@ const SignUp = () => {
                     </div>
                   </div>
 
+                  <div className='mb-4'>
+                    <label className='mb-2.5 block font-medium text-black dark:text-white'>
+                      Bank Name
+                    </label>
+                    <div className='relative'>
+                      <input
+                        {...register('bankName', {
+                          pattern: {
+                            value: /^[a-zA-Z\s]*$/,
+                            message: 'Invalid Bank name'
+                          }
+                        })}
+                        type='text'
+                        disabled={submitting}
+                        placeholder='Enter your Bank Name'
+                        className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+                      />
+                      {errors.bankName && (
+                        <p className='text-red-500 text-sm mt-1'>
+                          {errors.bankName.message}
+                        </p>
+                      )}
+
+                      <span className='absolute right-4 top-4'>
+                        <svg
+                          className='fill-current'
+                          width='22'
+                          height='22'
+                          viewBox='0 0 22 22'
+                          fill='none'
+                          xmlns='http://www.w3.org/2000/svg'
+                        >
+                          <g opacity='0.5'>
+                            <path
+                              d='M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2094L2.64844 4.84692C2.68281 4.84692 2.71719 4.84692 2.75156 4.84692H19.2516ZM19.2516 17.1532H2.75156C2.40781 17.1532 2.13281 16.8782 2.13281 16.5344V6.35942L10.1766 11.5157C10.4172 11.6875 10.6922 11.7563 10.9672 11.7563C11.2422 11.7563 11.5172 11.6875 11.7578 11.5157L19.8016 6.35942V16.5688C19.8703 16.9125 19.5953 17.1532 19.2516 17.1532Z'
+                              fill=''
+                            />
+                          </g>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className='mb-4'>
+                    <label className='mb-2.5 block font-medium text-black dark:text-white'>
+                      Account Number
+                    </label>
+                    <div className='relative'>
+                      <input
+                        {...register('bankAccountNumber', {
+                          pattern: {
+                            value: /^[0-9]*$/,
+                            message: 'Invalid Bank account number'
+                          }
+                        })}
+                        type='number'
+                        disabled={submitting}
+                        placeholder='Enter your Bank Account Number'
+                        className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+                      />
+                      {errors.bankAccountNumber && (
+                        <p className='text-red-500 text-sm mt-1'>
+                          {errors.bankAccountNumber.message}
+                        </p>
+                      )}
+
+                      <span className='absolute right-4 top-4'>
+                        <svg
+                          className='fill-current'
+                          width='22'
+                          height='22'
+                          viewBox='0 0 22 22'
+                          fill='none'
+                          xmlns='http://www.w3.org/2000/svg'
+                        >
+                          <g opacity='0.5'>
+                            <path
+                              d='M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2094L2.64844 4.84692C2.68281 4.84692 2.71719 4.84692 2.75156 4.84692H19.2516ZM19.2516 17.1532H2.75156C2.40781 17.1532 2.13281 16.8782 2.13281 16.5344V6.35942L10.1766 11.5157C10.4172 11.6875 10.6922 11.7563 10.9672 11.7563C11.2422 11.7563 11.5172 11.6875 11.7578 11.5157L19.8016 6.35942V16.5688C19.8703 16.9125 19.5953 17.1532 19.2516 17.1532Z'
+                              fill=''
+                            />
+                          </g>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className='mb-4'>
+                    <label className='mb-2.5 block font-medium text-black dark:text-white'>
+                      IFSC code
+                    </label>
+                    <div className='relative'>
+                      <input
+                        {...register('ifscCode', {
+                          pattern: {
+                            value: /^[A-Z]{4}0[A-Z0-9]{6}$/,
+                            message: 'Invalid IFSC code'
+                          }
+                        })}
+                        type='text'
+                        disabled={submitting}
+                        placeholder='Enter your IFSC code'
+                        className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+                      />
+                      {errors.ifscCode && (
+                        <p className='text-red-500 text-sm mt-1'>
+                          {errors.ifscCode.message}
+                        </p>
+                      )}
+
+                      <span className='absolute right-4 top-4'>
+                        <svg
+                          className='fill-current'
+                          width='22'
+                          height='22'
+                          viewBox='0 0 22 22'
+                          fill='none'
+                          xmlns='http://www.w3.org/2000/svg'
+                        >
+                          <g opacity='0.5'>
+                            <path
+                              d='M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2094L2.64844 4.84692C2.68281 4.84692 2.71719 4.84692 2.75156 4.84692H19.2516ZM19.2516 17.1532H2.75156C2.40781 17.1532 2.13281 16.8782 2.13281 16.5344V6.35942L10.1766 11.5157C10.4172 11.6875 10.6922 11.7563 10.9672 11.7563C11.2422 11.7563 11.5172 11.6875 11.7578 11.5157L19.8016 6.35942V16.5688C19.8703 16.9125 19.5953 17.1532 19.2516 17.1532Z'
+                              fill=''
+                            />
+                          </g>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className='mb-4'>
+                    <label className='mb-2.5 block font-medium text-black dark:text-white'>
+                      GST Number
+                    </label>
+                    <div className='relative'>
+                      <input
+                        {...register('gst', {
+                          pattern: {
+                            value:
+                              /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9]{1}$/,
+                            message: 'Invalid GST number'
+                          }
+                        })}
+                        type='text'
+                        disabled={submitting}
+                        placeholder='Enter your GST number'
+                        className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+                      />
+                      {errors.gst && (
+                        <p className='text-red-500 text-sm mt-1'>
+                          {errors.gst.message}
+                        </p>
+                      )}
+
+                      <span className='absolute right-4 top-4'>
+                        <svg
+                          className='fill-current'
+                          width='22'
+                          height='22'
+                          viewBox='0 0 22 22'
+                          fill='none'
+                          xmlns='http://www.w3.org/2000/svg'
+                        >
+                          <g opacity='0.5'>
+                            <path
+                              d='M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2094L2.64844 4.84692C2.68281 4.84692 2.71719 4.84692 2.75156 4.84692H19.2516ZM19.2516 17.1532H2.75156C2.40781 17.1532 2.13281 16.8782 2.13281 16.5344V6.35942L10.1766 11.5157C10.4172 11.6875 10.6922 11.7563 10.9672 11.7563C11.2422 11.7563 11.5172 11.6875 11.7578 11.5157L19.8016 6.35942V16.5688C19.8703 16.9125 19.5953 17.1532 19.2516 17.1532Z'
+                              fill=''
+                            />
+                          </g>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className='mb-4'>
+                    <label className='mb-2.5 block font-medium text-black dark:text-white'>
+                      Address
+                    </label>
+                    <div className='relative'>
+                      <input
+                        {...register('address', {
+                          pattern: {
+                            value: /^[a-zA-Z0-9\s]*$/,
+                            message: 'Invalid Address'
+                          }
+                        })}
+                        type='text'
+                        disabled={submitting}
+                        placeholder='Enter your Address'
+                        className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+                      />
+                      {errors.address && (
+                        <p className='text-red-500 text-sm mt-1'>
+                          {errors.address.message}
+                        </p>
+                      )}
+
+                      <span className='absolute right-4 top-4'>
+                        <svg
+                          className='fill-current'
+                          width='22'
+                          height='22'
+                          viewBox='0 0 22 22'
+                          fill='none'
+                          xmlns='http://www.w3.org/2000/svg'
+                        >
+                          <g opacity='0.5'>
+                            <path
+                              d='M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2094L2.64844 4.84692C2.68281 4.84692 2.71719 4.84692 2.75156 4.84692H19.2516ZM19.2516 17.1532H2.75156C2.40781 17.1532 2.13281 16.8782 2.13281 16.5344V6.35942L10.1766 11.5157C10.4172 11.6875 10.6922 11.7563 10.9672 11.7563C11.2422 11.7563 11.5172 11.6875 11.7578 11.5157L19.8016 6.35942V16.5688C19.8703 16.9125 19.5953 17.1532 19.2516 17.1532Z'
+                              fill=''
+                            />
+                          </g>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                  <div className='mb-4'>
+                    <label className='mb-2.5 block font-medium text-black dark:text-white'>
+                      Account Holder Name
+                    </label>
+                    <div className='relative'>
+                      <input
+                        {...register('accountHolderName', {
+                          pattern: {
+                            value: /^[a-zA-Z\s]*$/,
+                            message: 'Invalid Account Holder Name'
+                          }
+                        })}
+                        type='text'
+                        disabled={submitting}
+                        placeholder='Enter Account Holder Name'
+                        className='w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+                      />
+                      {errors.accountHolderName && (
+                        <p className='text-red-500 text-sm mt-1'>
+                          {errors.accountHolderName.message}
+                        </p>
+                      )}
+
+                      <span className='absolute right-4 top-4'>
+                        <svg
+                          className='fill-current'
+                          width='22'
+                          height='22'
+                          viewBox='0 0 22 22'
+                          fill='none'
+                          xmlns='http://www.w3.org/2000/svg'
+                        >
+                          <g opacity='0.5'>
+                            <path
+                              d='M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2094L2.64844 4.84692C2.68281 4.84692 2.71719 4.84692 2.75156 4.84692H19.2516ZM19.2516 17.1532H2.75156C2.40781 17.1532 2.13281 16.8782 2.13281 16.5344V6.35942L10.1766 11.5157C10.4172 11.6875 10.6922 11.7563 10.9672 11.7563C11.2422 11.7563 11.5172 11.6875 11.7578 11.5157L19.8016 6.35942V16.5688C19.8703 16.9125 19.5953 17.1532 19.2516 17.1532Z'
+                              fill=''
+                            />
+                          </g>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
                   <div className='mb-5'>
                     <input
                       type='submit'

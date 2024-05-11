@@ -23,11 +23,14 @@ const SignIn = () => {
 
     try {
       const response = await axios.post(
-        import.meta.env.VITE_REACT_API_ENDPOINT + '/api/login/admin',
+        import.meta.env.VITE_REACT_API_ENDPOINT + '/api/login',
         data
       )
 
       console.log('Login successful', response.data)
+      const token = response.data.token
+      localStorage.setItem('token', token)
+      console.log(token)
       navigate('/users/dashboard')
     } catch (error) {
       console.error('Login failed', error.message)
