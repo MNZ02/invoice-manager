@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const planSchema = new mongoose.Schema({
   name: {
@@ -13,6 +13,6 @@ const planSchema = new mongoose.Schema({
     type: Number,
     required: true
   }
-});
+})
 
-module.exports = mongoose.model('Plan', planSchema);
+module.exports = mongoose.model('Plan', planSchema)
