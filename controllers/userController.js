@@ -185,6 +185,8 @@ exports.registerUser = async (req, res) => {
         .json({ message: 'User with this email already exists' })
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10)
+
     // // Handle logo upload
     // const logoPath = req.file ? req.file.path : null
 
@@ -192,18 +194,23 @@ exports.registerUser = async (req, res) => {
     const newUser = new User({
       businessName,
       email,
-      password,
+      password: hashedPassword,
       contact,
       bankName,
       bankAccountNumber,
       ifscCode,
       GST,
       address,
-      bankAccountHolderName
+      bankAccountHolderName,
+      role: 'user'
     })
     await newUser.save()
 
-    res.json({ message: 'User created successfully', user: newUser })
+    res.json({
+      message: 'User created successfully',
+      user: newUser,
+      role: newUser.role
+    })
 
     // // Check if plan exists
     // const plan = await Plan.findById(planId)
@@ -240,7 +247,8 @@ exports.login = async (req, res) => {
     }
 
     // Check password
-    if (password !== user.password) {
+    const matchedPassword = await bcrypt.compare(password, user.password)
+    if (!matchedPassword) {
       return res.status(401).json({ message: 'Invalid email or password' })
     }
 
@@ -250,7 +258,7 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET_KEY,
       { expiresIn: '1h' }
     )
-    res.json({ token })
+    res.json({ token, role: user.role })
   } catch (error) {
     console.error('Error during login:', error)
     res.status(500).json({ message: 'Internal server error' })
@@ -263,9 +271,6 @@ exports.registerAdmin = async (req, res) => {
 
     // Check if admin already exists
     const adminExists = await User.findOne({ role: 'admin' })
-    if (adminExists) {
-      return res.status(400).json({ message: 'Admin already exists' })
-    }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -281,7 +286,13 @@ exports.registerAdmin = async (req, res) => {
     // Save admin user to database
     await admin.save()
 
-    res.status(201).json({ message: 'Admin user created successfully', admin })
+    res
+      .status(201)
+      .json({
+        message: 'Admin user created successfully',
+        admin,
+        role: admin.role
+      })
   } catch (error) {
     console.error('Error creating admin user:', error)
     res.status(500).json({ message: 'Internal server error' })
@@ -299,8 +310,8 @@ exports.loginAdmin = async (req, res) => {
     }
 
     // Check if user with email exists
-    const user = await User.findOne({ email })
-    if (!user) {
+    const admin = await User.findOne({ email })
+    if (!admin) {
       return res.status(401).json({ message: 'Invalid email or password' })
     }
 
@@ -310,12 +321,18 @@ exports.loginAdmin = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' })
     } else {
       const token = jwt.sign(
-        { userId: user._id, email: user.email },
+        { adminId: admin._id, email: admin.email },
         process.env.JWT_SECRET_KEY,
         { expiresIn: '1h' }
       )
 
-      res.status(200).json({ message: 'Admin logged in successfully', token })
+      res
+        .status(200)
+        .json({
+          message: 'Admin logged in successfully',
+          token,
+          role: admin.role
+        })
     }
   } catch (error) {
     console.error('Error during login:', error.message)

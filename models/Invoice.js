@@ -1,17 +1,20 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const invoiceSchema = new mongoose.Schema({
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    // type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'User',
     required: true
   },
-  items: [{
-    name: String,
-    quantity: Number,
-    price: Number,
-    amount: Number
-  }],
+  items: [
+    {
+      name: String,
+      quantity: Number,
+      price: Number,
+      amount: Number
+    }
+  ],
   totalAmount: {
     type: Number,
     required: true
@@ -27,8 +30,8 @@ const invoiceSchema = new mongoose.Schema({
   },
   clientName: String,
   clientAddress: String
-});
+})
 
-const Invoice = mongoose.model('Invoice', invoiceSchema);
+const Invoice = mongoose.model('Invoice', invoiceSchema)
 
-module.exports = Invoice;
+module.exports = Invoice
