@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import './index.css'
 import editSvg from '../../images/user-table-buttons/edit.svg'
 import deleteSvg from '../../images/user-table-buttons/delete.svg'
@@ -9,133 +9,134 @@ import {
   flexRender
 } from '@tanstack/react-table'
 import { makeData } from './makeData'
+import axios from 'axios'
 
 function History () {
-  const invoices = () => {
-    return [
-      {
-        Name: 'John Doe',
-        Address: '123 Main St',
-        Email: 'abc@abc.com',
-        Website: 'www.abc.com',
-        Phone: '123-456-7890',
-        'Bank name': 'Bank of America',
-        'Bank account name': '1234567890',
-        'Client Name': 'Jane Doe',
-        'Client Address': '123 Main St',
-        'Invoice Number': '123456',
-        'Invoice Date': '01/01/2021',
-        'Due Date': '01/31/2021'
-      },
-      {
-        Name: 'Jane Doe',
-        Address: '123 Main St',
-        Email: 'xyz@xyz.com',
-        Website: 'www.xyz.com',
-        Phone: '123-456-7890',
-        'Bank name': 'Bank of America',
-        'Bank account name': '1234567890',
-        'Client Name': 'John Doe',
-        'Client Address': '123 Main',
-        'Invoice Number': '123456',
-        'Invoice Date': '01/01/2021',
-        'Due Date': '01/31/2021'
+  const api = axios.create({
+    baseURL: import.meta.env.VITE_REACT_API_ENDPOINT,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `${localStorage.getItem('token')}`
+    }
+  })
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const response = await api.get('/api/invoices')
+        const data = response.data.map(invoice => ({
+          id: invoice._id,
+          user: invoice.user,
+          items: invoice.items,
+          totalAmount: invoice.totalAmount,
+          additionalNotes: invoice.additionalNotes,
+          invoiceNumber: invoice.invoiceNumber,
+          invoiceDate: invoice.invoiceDate,
+          clientName: invoice.clientName,
+          clientAddress: invoice.clientAddress
+        }))
+        console.log('Invoices', data)
+        setData(data)
+      } catch (error) {
+        console.error('Error fetching invoices', error)
       }
-    ]
-  }
+    }
+    fetchInvoices()
+  }, [])
+
   const rerender = React.useReducer(() => ({}), {})[1]
 
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => [
       {
-        header: 'User',
+        id: 'user',
+        accessorKey: 'user',
+        header: () => 'User',
+        cell: info => info.getValue(),
+        footer: props => props.column.id
+      },
+      {
+        id: 'items',
+        header: () => 'Items',
         footer: props => props.column.id,
         columns: [
           {
-            accessorKey: 'Name',
-            cell: info => info.getValue(),
-            footer: props => props.column.id
+            id: 'name',
+            accessorKey: 'name',
+            header: () => 'Name',
+            footer: props => props.column.id,
+            cell: info =>
+              info.row.original.items.map(item => item.name).join(', ')
           },
           {
-            id: 'Address',
-            accessorKey: 'Address',
-            cell: info => info.getValue(),
-            header: () => <span>Address</span>,
-            footer: props => props.column.id
+            id: 'quantity',
+            accessorKey: 'quantity',
+            header: () => 'Quantity',
+            footer: props => props.column.id,
+            cell: info =>
+              info.row.original.items.map(item => item.quantity).join(', ')
           },
           {
-            id: 'Email',
-            accessorKey: 'Email',
-            cell: info => info.getValue(),
-            header: () => <span>Email</span>,
-            footer: props => props.column.id
+            id: 'price',
+            accessorKey: 'price',
+            header: () => 'Price',
+            footer: props => props.column.id,
+            cell: info =>
+              info.row.original.items.map(item => item.price).join(', ')
           },
           {
-            id: 'Website',
-            accessorKey: 'Website',
-            cell: info => info.getValue(),
-            header: () => <span>Website</span>,
-            footer: props => props.column.id
-          },
-          {
-            id: 'Phone',
-            accessorKey: 'Phone',
-            cell: info => info.getValue(),
-            header: () => <span>Phone</span>,
-            footer: props => props.column.id
-          },
-          {
-            id: 'Bank name',
-            accessorKey: 'Bank name',
-            cell: info => info.getValue(),
-            header: () => <span>Bank Name</span>,
-            footer: props => props.column.id
-          },
-          {
-            id: 'Bank account name',
-            accessorKey: 'Bank account name',
-            cell: info => info.getValue(),
-            header: () => <span>Bank account number</span>,
-            footer: props => props.column.id
+            id: 'amount',
+            accessorKey: 'amount',
+            header: () => 'Amount',
+            footer: props => props.column.id,
+            cell: info =>
+              info.row.original.items
+                .map(item => item.quantity * item.price)
+                .join(', ')
           }
         ]
       },
       {
-        header: 'Client',
-        footer: props => props.column.id,
-        columns: [
-          {
-            accessorKey: 'Client Name',
-            header: () => 'Client Name',
-            footer: props => props.column.id
-          },
-          {
-            accessorKey: 'Client Address',
-            header: () => <span>Client Address</span>,
-            footer: props => props.column.id
-          },
-          {
-            accessorKey: 'Invoice Number',
-            header: 'Invoice Number',
-            footer: props => props.column.id
-          },
-          {
-            accessorKey: 'Invoice Date',
-            header: 'Invoice Date',
-            footer: props => props.column.id
-          },
-          {
-            accessorKey: 'Due Date',
-            header: 'Due Date',
-            footer: props => props.column.id
-          }
-        ]
+        id: 'totalAmount',
+        accessorKey: 'totalAmount',
+        header: () => 'Total Amount',
+        footer: props => props.column.id
+      },
+      {
+        id: 'additionalNotes',
+        accessorKey: 'additionalNotes',
+        header: () => <span>Additional notes</span>,
+        footer: props => props.column.id
+      },
+      {
+        id: 'invoiceNumber',
+        accessorKey: 'invoiceNumber',
+        header: () => <span>Invoice Number</span>,
+        footer: props => props.column.id
+      },
+      {
+        id: 'invoiceDate',
+        accessorKey: 'invoiceDate',
+        header: () => <span>Invoice Date</span>,
+        footer: props => props.column.id
+      },
+      {
+        id: 'clientName',
+        accessorKey: 'clientName',
+        header: () => <span>Client Name</span>,
+        footer: props => props.column.id
+      },
+      {
+        id: 'clientAddress',
+        accessorKey: 'clientAddress',
+        header: () => <span>Client Address</span>,
+        footer: props => props.column.id
       }
     ],
     []
   )
 
-  const [data, setData] = React.useState(invoices())
+  const [data, setData] = React.useState([])
   const refreshData = () => setData(() => makeData(100000))
   const [editRowId, setEditRowId] = useState(null)
 
@@ -156,11 +157,41 @@ function History () {
     debugTable: true
   })
 
+  const handleAddInvoice = async () => {
+    try {
+      setData(prevData => [...prevData, newInvoice])
+      const response = await api.post('/api/invoices', newInvoice)
+    } catch (error) {
+      console.error('Error adding invoice', error)
+    }
+  }
+
   const handleEdit = row => {
     setEditRowId(row.id)
   }
 
-  const handleSave = () => {
+  const handleSave = async row => {
+    if (!row || !row.original) {
+      console.error('Row not found')
+      return
+    }
+
+    const updatedRow = data.find(item => item.id === row.original.id)
+    if (!updatedRow) {
+      console.error('Row not found in data')
+      return
+    }
+
+    const response = await api.put(`/api/invoices/${updatedRow.id}`, updatedRow)
+
+    setData(prevData =>
+      prevData.map(item => {
+        if (item.id === updatedRow.id) {
+          return response.data // Update with server response
+        }
+        return item
+      })
+    )
     setEditRowId(null)
     console.log('Edited data', editRowId)
   }
@@ -176,8 +207,13 @@ function History () {
     setData(updatedData)
   }
 
-  const handleDelete = row => {
-    setData(prevData => prevData.filter(data => data !== row.original))
+  const handleDelete = async row => {
+    setData(prevData => prevData.filter(data => data.id !== row.original.id))
+    try {
+      const response = await api.delete(`/api/invoices/${row.original.id}`)
+    } catch (error) {
+      console.error('Error deleting invoice', error)
+    }
   }
 
   return (
@@ -235,7 +271,7 @@ function History () {
                   <td>
                     {editRowId === row.id ? (
                       <div>
-                        <button onClick={handleSave}>Save</button>
+                        <button onClick={() => handleSave(row)}>Save</button>
                       </div>
                     ) : (
                       <div className='flex space-x-4'>

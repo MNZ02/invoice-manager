@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import './index.css'
 import editSvg from '../../../images/user-table-buttons/edit.svg'
 import deleteSvg from '../../../images/user-table-buttons/delete.svg'
+import penSvg from '../../../images/invoice/pen.svg'
 import {
   useReactTable,
   getCoreRowModel,
@@ -9,61 +10,94 @@ import {
   flexRender
 } from '@tanstack/react-table'
 import { makeData } from './makeData'
+import axios from 'axios'
 
 function TableTwo () {
   const rerender = React.useReducer(() => ({}), {})[1]
 
-  const columns = React.useMemo(
+  const api = axios.create({
+    baseURL: import.meta.env.VITE_REACT_API_ENDPOINT,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `${localStorage.getItem('token')}`
+    }
+  })
+
+  useEffect(() => {
+    async function fetchUsers () {
+      const response = await api.get('/api/users')
+      const data = response.data.map(user => ({
+        id: user._id,
+        businessName: user.businessName,
+        email: user.email,
+        contact: user.contact,
+        bankName: user.bankName,
+        bankAccountNumber: user.bankAccountNumber,
+        ifscCode: user.ifscCode,
+        gst: user.gst,
+        address: user.address,
+        bankAccountHolderName: user.bankAccountHolderName
+      }))
+      setData(data)
+      console.log(data)
+    }
+
+    fetchUsers()
+  }, [])
+
+  const columns = useMemo(
     () => [
       {
-        header: 'Name',
-        footer: props => props.column.id,
-        columns: [
-          {
-            accessorKey: 'firstName',
-            cell: info => info.getValue(),
-            footer: props => props.column.id
-          },
-          {
-            accessorFn: row => row.lastName,
-            id: 'lastName',
-            cell: info => info.getValue(),
-            header: () => <span>Last Name</span>,
-            footer: props => props.column.id
-          }
-        ]
+        accessorKey: 'businessName',
+        header: () => 'Business Name',
+        cell: info => info.getValue(),
+        footer: props => props.column.id
       },
       {
-        header: 'Info',
-        footer: props => props.column.id,
-        columns: [
-          {
-            accessorKey: 'age',
-            header: () => 'Age',
-            footer: props => props.column.id
-          },
-          {
-            accessorKey: 'visits',
-            header: () => <span>Visits</span>,
-            footer: props => props.column.id
-          },
-          {
-            accessorKey: 'status',
-            header: 'Status',
-            footer: props => props.column.id
-          },
-          {
-            accessorKey: 'progress',
-            header: 'Profile Progress',
-            footer: props => props.column.id
-          }
-        ]
+        accessorKey: 'email',
+        header: () => 'email',
+        footer: props => props.column.id
+      },
+      {
+        accessorKey: 'contact',
+        header: () => <span>Contact</span>,
+        footer: props => props.column.id
+      },
+      {
+        accessorKey: 'bankName',
+        header: () => <span>Bank Name</span>,
+        footer: props => props.column.id
+      },
+      {
+        accessorKey: 'bankAccountNumber',
+        header: () => <span>Account Number</span>,
+        footer: props => props.column.id
+      },
+      {
+        accessorKey: 'ifscCode',
+        header: () => <span>IFSC code</span>,
+        footer: props => props.column.id
+      },
+      {
+        accessorKey: 'gst',
+        header: () => <span>GST</span>,
+        footer: props => props.column.id
+      },
+      {
+        accessorKey: 'address',
+        header: () => <span>Address</span>,
+        footer: props => props.column.id
+      },
+      {
+        accessorKey: 'bankAccountHolderName',
+        header: () => <span>Account Holder Name</span>,
+        footer: props => props.column.id
       }
     ],
     []
   )
 
-  const [data, setData] = React.useState(() => makeData(10000))
+  const [data, setData] = React.useState([])
   const refreshData = () => setData(() => makeData(100000))
   const [editRowId, setEditRowId] = useState(null)
 
@@ -84,11 +118,48 @@ function TableTwo () {
     debugTable: true
   })
 
+  const handleAddUser = async () => {
+    const newUser = {
+      businessName: 'New Business',
+      email: 'email@email.com',
+      contact: '1234567890',
+      bankName: 'Bank Name',
+      bankAccountNumber: '123456789',
+      ifscCode: 'IFSC1234',
+      gst: 'GST1234',
+      address: 'Address',
+      bankAccountHolderName: 'Account Holder Name'
+    }
+    setData(prevData => [...prevData, newUser])
+    const response = await api.post('/api/users', newUser)
+    console.log(response)
+  }
+
   const handleEdit = row => {
     setEditRowId(row.id)
   }
+  const handleSave = async row => {
+    if (!row || !row.original) {
+      console.error('Row not found')
+      return
+    }
 
-  const handleSave = () => {
+    const updatedRow = data.find(item => item.id === row.original.id)
+    if (!updatedRow) {
+      console.error('Row not found in data')
+      return
+    }
+
+    const response = await api.put(`/api/users/${updatedRow.id}`, updatedRow)
+
+    setData(prevData =>
+      prevData.map(item => {
+        if (item.id === updatedRow.id) {
+          return response.data // Update with server response
+        }
+        return item
+      })
+    )
     setEditRowId(null)
     console.log('Edited data', editRowId)
   }
@@ -104,13 +175,29 @@ function TableTwo () {
     setData(updatedData)
   }
 
-  const handleDelete = row => {
-    setData(prevData => prevData.filter(data => data !== row.original))
+  const handleDelete = async row => {
+    setData(prevData => prevData.filter(data => data.id !== row.original.id))
+    try {
+      const response = await api.delete(`/api/users/${row.original.id}`)
+    } catch (error) {
+      console.error('Error deleting invoice', error)
+    }
   }
 
   return (
     <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default my-4'>
       <h1 className='font-bold text-xl my-2 px-2'>User Table</h1>
+      <div className='flex justify-end'>
+        <button
+          onClick={handleAddUser}
+          className='bg-blue-500 text-white px-2 py-2 rounded-md shadow-md flex items-center gap-2'
+        >
+          Create new
+          <span>
+            <img className='w-3' src={penSvg} alt='pen' />
+          </span>
+        </button>
+      </div>
       <div className='p-2 block max-w-full overflow-y-hidden'>
         <div className='h-2' />
         <table className='w-full '>
@@ -163,7 +250,7 @@ function TableTwo () {
                   <td>
                     {editRowId === row.id ? (
                       <div>
-                        <button onClick={handleSave}>Save</button>
+                        <button onClick={() => handleSave(row)}>Save</button>
                       </div>
                     ) : (
                       <div className='flex space-x-4'>

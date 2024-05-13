@@ -5,7 +5,8 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumbs'
 import LogoDark from '../../images/logo/logo-dark.svg'
 import Logo from '../../images/logo/logo.svg'
 import axios from 'axios'
-
+import userSlice, { setUser } from '../../redux/userSlice'
+import { useDispatch } from 'react-redux'
 const SignIn = () => {
   const {
     register,
@@ -15,6 +16,8 @@ const SignIn = () => {
   } = useForm()
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
 
@@ -28,10 +31,19 @@ const SignIn = () => {
       )
 
       console.log('Login successful', response.data)
+      //set token
       const token = response.data.token
       localStorage.setItem('token', token)
       console.log(token)
-      navigate('/users/dashboard')
+
+      //set user redux
+      const role = response.data.role
+      dispatch(setUser({ ...data }))
+      if (role === 'user') {
+        navigate('/users/dashboard')
+      } else if (role === 'admin') {
+        navigate('/admin/')
+      }
     } catch (error) {
       console.error('Login failed', error.message)
       setSubmitError('Login failed. Please try again.')
