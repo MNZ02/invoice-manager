@@ -254,7 +254,7 @@ exports.login = async (req, res) => {
 
     // If authentication successful, generate JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET_KEY,
       { expiresIn: '1h' }
     )
@@ -286,13 +286,11 @@ exports.registerAdmin = async (req, res) => {
     // Save admin user to database
     await admin.save()
 
-    res
-      .status(201)
-      .json({
-        message: 'Admin user created successfully',
-        admin,
-        role: admin.role
-      })
+    res.status(201).json({
+      message: 'Admin user created successfully',
+      admin,
+      role: admin.role
+    })
   } catch (error) {
     console.error('Error creating admin user:', error)
     res.status(500).json({ message: 'Internal server error' })
@@ -321,18 +319,16 @@ exports.loginAdmin = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' })
     } else {
       const token = jwt.sign(
-        { adminId: admin._id, email: admin.email },
+        { adminId: admin._id, email: admin.email, role: admin.role },
         process.env.JWT_SECRET_KEY,
         { expiresIn: '1h' }
       )
 
-      res
-        .status(200)
-        .json({
-          message: 'Admin logged in successfully',
-          token,
-          role: admin.role
-        })
+      res.status(200).json({
+        message: 'Admin logged in successfully',
+        token,
+        role: admin.role
+      })
     }
   } catch (error) {
     console.error('Error during login:', error.message)
