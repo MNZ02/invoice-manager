@@ -60,8 +60,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className='flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5'>
-        <NavLink to='/'>
-          <img src='' alt='Logo' />
+        <NavLink to='/admin'>
+          <h1 className='text-white text-xl text-center mx-2 font-bold  px-2 py-1'>
+            Invoice Manager
+          </h1>
         </NavLink>
 
         <button

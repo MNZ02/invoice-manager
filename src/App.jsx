@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { About, CallToAction, Home, ScrollToTop, SuggestionBox } from './pages'
 import ECommerce from './pages/Dashboard/Ecommerce'
@@ -20,10 +20,14 @@ import UserHistory from './pages/UserHistory'
 import Settings from './pages/Settings'
 import Profile from './pages/Profile'
 import CreateInvoice from './pages/CreateInvoice'
+import AdminRoutes from './components/AdminRoutes/AdminRoutes'
+import { getUserRole } from './api/getUserRole'
 
 export default function App () {
-  const user = true
-
+  const token = localStorage.getItem('token')
+  const user = token ? true : false
+  const role = getUserRole()
+  console.log(role)
   return (
     <Provider store={store}>
       <BrowserRouter>
@@ -59,9 +63,6 @@ export default function App () {
             {/* <Route path="/cancelled" element={<Cancelled />}></Route> */}
             <Route path='/' element={<Invoice />}></Route>
             <Route element={<ProtectedRoutes />}>
-              <Route path='/admin' element={<ECommerce />} />
-              <Route path='/admin/users/tables' element={<Tables />} />
-              <Route path='/admin/plans' element={<Plans />} />
               <Route path='/users/dashboard' element={<UserDashboard />} />
               <Route
                 path='/users/dashboard/history'
@@ -90,6 +91,21 @@ export default function App () {
                 </>
               }
             />
+
+            <Route
+              path='/admin/*'
+              element={<AdminRoutes element={<ECommerce />} userRole={role} />}
+            />
+
+            <Route
+              path='/admin/plans'
+              element={<AdminRoutes element={<Plans />} userRole={role} />}
+            />
+            <Route
+              path='/admin/users/tables'
+              element={<AdminRoutes element={<Tables />} userRole={role} />}
+            />
+            <Route path='*' element={<Error />} />
           </Routes>
         </State.Provider>
       </BrowserRouter>

@@ -9,17 +9,9 @@ import {
   flexRender
 } from '@tanstack/react-table'
 import { makeData } from './makeData'
-import axios from 'axios'
+import api from '../../api/api'
 
 function History () {
-  const api = axios.create({
-    baseURL: import.meta.env.VITE_REACT_API_ENDPOINT,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `${localStorage.getItem('token')}`
-    }
-  })
-
   useEffect(() => {
     const fetchInvoices = async () => {
       try {

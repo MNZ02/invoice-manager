@@ -48,10 +48,6 @@ const Header = props => {
               </span>
             </span>
           </button>
-
-          <Link className='block flex-shrink-0 lg:hidden' to='/'>
-            <img src={LogoIcon} alt='Logo' />
-          </Link>
         </div>
 
         <div className='hidden sm:block'>
@@ -72,9 +68,9 @@ const Header = props => {
           <Link to='/suggestion-box'>
             <h2 className='cursor-pointer'>Suggestion box</h2>
           </Link>
-          <Link to='/admin'>
+          {/* <Link to='/admin'>
             <h2>Admin dashboard</h2>
-          </Link>
+          </Link> */}
           <DropdownUser />
         </div>
       </div>
