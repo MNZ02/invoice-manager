@@ -13,25 +13,33 @@ import { makeData } from './makeData'
 import api from '../../../api/api'
 
 function TableTwo () {
+  const [data, setData] = React.useState([])
+  const [editRowId, setEditRowId] = useState(null)
+
   const rerender = React.useReducer(() => ({}), {})[1]
 
   useEffect(() => {
     async function fetchUsers () {
-      const response = await api.get('/api/users')
-      const data = response.data.map(user => ({
-        id: user._id,
-        businessName: user.businessName,
-        email: user.email,
-        contact: user.contact,
-        bankName: user.bankName,
-        bankAccountNumber: user.bankAccountNumber,
-        ifscCode: user.ifscCode,
-        gst: user.gst,
-        address: user.address,
-        bankAccountHolderName: user.bankAccountHolderName
-      }))
-      setData(data)
-      console.log(data)
+      try {
+        const response = await api.get('/api/users')
+        const data = response.data.map(user => ({
+          id: user._id,
+          businessName: user.businessName,
+          email: user.email,
+          contact: user.contact,
+          bankName: user.bankName,
+          bankAccountNumber: user.bankAccountNumber,
+          ifscCode: user.ifscCode,
+          gst: user.gst,
+          address: user.address,
+          bankAccountHolderName: user.bankAccountHolderName,
+          role: user.role
+        }))
+        setData(data)
+        console.log(data)
+      } catch (error) {
+        console.error('Error fetching users: ', error.message)
+      }
     }
 
     fetchUsers()
@@ -50,6 +58,7 @@ function TableTwo () {
         header: () => 'email',
         footer: props => props.column.id
       },
+
       {
         accessorKey: 'contact',
         header: () => <span>Contact</span>,
@@ -84,14 +93,17 @@ function TableTwo () {
         accessorKey: 'bankAccountHolderName',
         header: () => <span>Account Holder Name</span>,
         footer: props => props.column.id
+      },
+      {
+        accessorKey: 'role',
+        header: () => <span>Role</span>,
+        footer: props => props.column.id
       }
     ],
     []
   )
 
-  const [data, setData] = React.useState([])
   const refreshData = () => setData(() => makeData(100000))
-  const [editRowId, setEditRowId] = useState(null)
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
@@ -117,19 +129,24 @@ function TableTwo () {
       contact: '1234567890',
       bankName: 'Bank Name',
       bankAccountNumber: '123456789',
-      ifscCode: 'IFSC1234',
-      gst: 'GST1234',
+      ifscCode: 'IFSC123456',
+      gst: 'GST123456',
       address: 'Address',
-      bankAccountHolderName: 'Account Holder Name'
+      bankAccountHolderName: 'Account Holder',
+      role: 'user'
     }
-    setData(prevData => [...prevData, newUser])
-    const response = await api.post('/api/users', newUser)
-    console.log(response)
+    try {
+      const response = await api.post('/api/users', newUser)
+      setData(prevData => [...prevData, newUser])
+      console.log('Added data', newUser)
+    } catch (error) {
+      console.error('Error adding user', error)
+    }
   }
-
   const handleEdit = row => {
     setEditRowId(row.id)
   }
+
   const handleSave = async row => {
     if (!row || !row.original) {
       console.error('Row not found')
@@ -220,7 +237,7 @@ function TableTwo () {
                 <tr key={row.id}>
                   {row.getVisibleCells().map(cell => {
                     return (
-                      <td key={cell.id}>
+                      <td key={cell.id} className='border p-2 rounded'>
                         {editRowId === row.id ? (
                           <input
                             type='text'

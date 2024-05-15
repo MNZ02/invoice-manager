@@ -1,365 +1,96 @@
-import React, { useState, useMemo, useEffect } from 'react'
-import './index.css'
-import editSvg from '../../images/user-table-buttons/edit.svg'
-import deleteSvg from '../../images/user-table-buttons/delete.svg'
-import {
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  flexRender
-} from '@tanstack/react-table'
-import { makeData } from './makeData'
+import React, { useEffect, useState } from 'react'
+import InvoiceTable from './InvoiceTable'
 import api from '../../api/api'
 
 function History () {
+  const schema = [
+    {
+      user: 'aaaazzaaabzzaac',
+      items: [
+        {
+          name: 'Item x1',
+          quantity: 12,
+          price: 10,
+          _id: '6644e313929afbfde31b7f7f'
+        },
+        {
+          name: 'Item x2',
+          quantity: 11,
+          price: 20,
+          _id: '6644e313929afbfde31b7f80'
+        },
+        {
+          name: 'Item x3',
+          quantity: 11,
+          price: 20,
+          _id: '6644e313929afbfde31b7f81'
+        }
+      ],
+      totalAmount: 40,
+      additionalNotes: 'Optional additional notes',
+      invoiceNumber: 'INV0aa0aaaa11aaa1',
+      invoiceDate: '2024-04-30T00:00:00.000Z',
+      clientName: 'Client Name',
+      clientAddress: 'Client Address',
+      _id: '6644e313929afbfde31b7f7e',
+      __v: 0
+    },
+    {
+      user: 'abcv',
+      items: [
+        {
+          name: 'Item x1',
+          quantity: 12,
+          price: 10,
+          _id: '6644e313929afbfde31b7f7f'
+        },
+        {
+          name: 'Item x2',
+          quantity: 11,
+          price: 20,
+          _id: '6644e313929afbfde31b7f80'
+        },
+        {
+          name: 'Item x3',
+          quantity: 11,
+          price: 20,
+          _id: '6644e313929afbfde31b7f81'
+        }
+      ],
+      totalAmount: 40,
+      additionalNotes: 'Optional additional notes',
+      invoiceNumber: 'INV0aa0aaaa11aaa1',
+      invoiceDate: '2024-04-30T00:00:00.000Z',
+      clientName: 'Client Name',
+      clientAddress: 'Client Address',
+      _id: '6644e313929afbfde31b7f7e',
+      __v: 0
+    }
+  ]
+  const [invoices, setInvoices] = useState([])
+
   useEffect(() => {
-    const fetchInvoices = async () => {
+    const fetchData = async () => {
       try {
         const response = await api.get('/api/invoices')
-        const data = response.data.map(invoice => ({
-          id: invoice._id,
-          user: invoice.user,
-          items: invoice.items,
-          totalAmount: invoice.totalAmount,
-          additionalNotes: invoice.additionalNotes,
-          invoiceNumber: invoice.invoiceNumber,
-          invoiceDate: invoice.invoiceDate,
-          clientName: invoice.clientName,
-          clientAddress: invoice.clientAddress
-        }))
-        console.log('Invoices', data)
-        setData(data)
+        const data = response.data
+        console.log('response: ', response.data)
+        setInvoices(data)
       } catch (error) {
-        console.error('Error fetching invoices', error)
+        console.error('Error fetching data: ', error)
       }
     }
-    fetchInvoices()
+    fetchData()
   }, [])
 
-  const rerender = React.useReducer(() => ({}), {})[1]
-
-  const columns = useMemo(
-    () => [
-      {
-        id: 'user',
-        accessorKey: 'user',
-        header: () => 'User',
-        cell: info => info.getValue(),
-        footer: props => props.column.id
-      },
-      {
-        id: 'items',
-        header: () => 'Items',
-        footer: props => props.column.id,
-        columns: [
-          {
-            id: 'name',
-            accessorKey: 'name',
-            header: () => 'Name',
-            footer: props => props.column.id,
-            cell: info =>
-              info.row.original.items.map(item => item.name).join(', ')
-          },
-          {
-            id: 'quantity',
-            accessorKey: 'quantity',
-            header: () => 'Quantity',
-            footer: props => props.column.id,
-            cell: info =>
-              info.row.original.items.map(item => item.quantity).join(', ')
-          },
-          {
-            id: 'price',
-            accessorKey: 'price',
-            header: () => 'Price',
-            footer: props => props.column.id,
-            cell: info =>
-              info.row.original.items.map(item => item.price).join(', ')
-          },
-          {
-            id: 'amount',
-            accessorKey: 'amount',
-            header: () => 'Amount',
-            footer: props => props.column.id,
-            cell: info =>
-              info.row.original.items
-                .map(item => item.quantity * item.price)
-                .join(', ')
-          }
-        ]
-      },
-      {
-        id: 'totalAmount',
-        accessorKey: 'totalAmount',
-        header: () => 'Total Amount',
-        footer: props => props.column.id
-      },
-      {
-        id: 'additionalNotes',
-        accessorKey: 'additionalNotes',
-        header: () => <span>Additional notes</span>,
-        footer: props => props.column.id
-      },
-      {
-        id: 'invoiceNumber',
-        accessorKey: 'invoiceNumber',
-        header: () => <span>Invoice Number</span>,
-        footer: props => props.column.id
-      },
-      {
-        id: 'invoiceDate',
-        accessorKey: 'invoiceDate',
-        header: () => <span>Invoice Date</span>,
-        footer: props => props.column.id
-      },
-      {
-        id: 'clientName',
-        accessorKey: 'clientName',
-        header: () => <span>Client Name</span>,
-        footer: props => props.column.id
-      },
-      {
-        id: 'clientAddress',
-        accessorKey: 'clientAddress',
-        header: () => <span>Client Address</span>,
-        footer: props => props.column.id
-      }
-    ],
-    []
-  )
-
-  const [data, setData] = React.useState([])
-  const refreshData = () => setData(() => makeData(100000))
-  const [editRowId, setEditRowId] = useState(null)
-
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: 10
-  })
-
-  const table = useReactTable({
-    data,
-    columns,
-    state: {
-      pagination
-    },
-    onPaginationChange: setPagination,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    debugTable: true
-  })
-
-  const handleAddInvoice = async () => {
-    try {
-      setData(prevData => [...prevData, newInvoice])
-      const response = await api.post('/api/invoices', newInvoice)
-    } catch (error) {
-      console.error('Error adding invoice', error)
-    }
-  }
-
-  const handleEdit = row => {
-    setEditRowId(row.id)
-  }
-
-  const handleSave = async row => {
-    if (!row || !row.original) {
-      console.error('Row not found')
-      return
-    }
-
-    const updatedRow = data.find(item => item.id === row.original.id)
-    if (!updatedRow) {
-      console.error('Row not found in data')
-      return
-    }
-
-    const response = await api.put(`/api/invoices/${updatedRow.id}`, updatedRow)
-
-    setData(prevData =>
-      prevData.map(item => {
-        if (item.id === updatedRow.id) {
-          return response.data // Update with server response
-        }
-        return item
-      })
-    )
-    setEditRowId(null)
-    console.log('Edited data', editRowId)
-  }
-
-  const handleChange = (e, row) => {
-    const { name, value } = e.target
-    const updatedData = data.map(item => {
-      if (item === row.original) {
-        return { ...item, [name]: value }
-      }
-      return item
-    })
-    setData(updatedData)
-  }
-
-  const handleDelete = async row => {
-    setData(prevData => prevData.filter(data => data.id !== row.original.id))
-    try {
-      const response = await api.delete(`/api/invoices/${row.original.id}`)
-    } catch (error) {
-      console.error('Error deleting invoice', error)
-    }
-  }
-
   return (
-    <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default my-4'>
-      <h1 className='font-bold text-xl my-2 px-2'>Invoices History</h1>
-      <div className='p-2 block max-w-full overflow-y-hidden'>
-        <div className='h-2' />
-        <table className='w-full '>
-          <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  return (
-                    <th key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : (
-                        <div>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                        </div>
-                      )}
-                    </th>
-                  )
-                })}
-                <th>Actions</th>
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map(row => {
-              return (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map(cell => {
-                    return (
-                      <td key={cell.id}>
-                        {editRowId === row.id ? (
-                          <input
-                            type='text'
-                            name={cell.column.id}
-                            value={row.original[cell.column.id]}
-                            onChange={e => handleChange(e, row)}
-                          />
-                        ) : (
-                          <div>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </div>
-                        )}
-                      </td>
-                    )
-                  })}
-                  <td>
-                    {editRowId === row.id ? (
-                      <div>
-                        <button onClick={() => handleSave(row)}>Save</button>
-                      </div>
-                    ) : (
-                      <div className='flex space-x-4'>
-                        <img
-                          onClick={() => handleEdit(row)}
-                          className='w-5 cursor-pointer'
-                          src={editSvg}
-                          alt='edit'
-                        />
-                        <img
-                          onClick={() => handleDelete(row)}
-                          className='w-5 cursor-pointer'
-                          src={deleteSvg}
-                          alt='delete'
-                        />
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-        <div className='h-2' />
-        <div className='flex items-center gap-2'>
-          <button
-            className='border rounded p-1'
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<<'}
-          </button>
-          <button
-            className='border rounded p-1'
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<'}
-          </button>
-          <button
-            className='border rounded p-1'
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>'}
-          </button>
-          <button
-            className='border rounded p-1'
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>>'}
-          </button>
-          <span className='flex items-center gap-1'>
-            <div>Page</div>
-            <strong>
-              {table.getState().pagination.pageIndex + 1} of{' '}
-              {table.getPageCount()}
-            </strong>
-          </span>
-          <span className='flex items-center gap-1'>
-            | Go to page:
-            <input
-              type='number'
-              defaultValue={table.getState().pagination.pageIndex + 1}
-              onChange={e => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0
-                table.setPageIndex(page)
-              }}
-              className='border p-1 rounded w-16'
-            />
-          </span>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={e => {
-              table.setPageSize(Number(e.target.value))
-            }}
-          >
-            {[10, 20, 30, 40, 50].map(pageSize => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
+    <div>
+      <h1>Invoice</h1>
+      {invoices.map((invoice, index) => (
+        <div key={index}>
+          <InvoiceTable invoice={invoice} />
         </div>
-        <div>{table.getRowModel().rows.length} Rows</div>
-      </div>
-
-      {/* <hr />
-      <div>
-        <button onClick={() => rerender()}>Force Rerender</button>
-      </div>
-      <div>
-        <button onClick={() => refreshData()}>Refresh Data</button>
-      </div>
-      <pre>{JSON.stringify(pagination, null, 2)}</pre> */}
+      ))}
     </div>
   )
 }

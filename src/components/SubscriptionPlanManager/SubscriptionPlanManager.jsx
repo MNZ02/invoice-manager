@@ -11,20 +11,11 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import axios from 'axios'
+import api from '../../api/api'
 
 function SubscriptionPlanManager () {
   const [editRowId, setEditRowId] = useState(0)
   const [data, setData] = useState([])
-
-  const api = axios.create({
-    baseURL: import.meta.env.VITE_REACT_API_ENDPOINT,
-    headers: {
-      'Content-Type': 'application/json',
-
-      Authorization: `${localStorage.getItem('token')}`
-    }
-  })
 
   useEffect(() => {
     const fetchPlans = async () => {
