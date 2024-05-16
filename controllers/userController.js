@@ -27,8 +27,8 @@ exports.createUser = [
       const {
         businessName,
         email,
-        contact,
         password,
+        contact,
         bankName,
         bankAccountNumber,
         ifscCode,
@@ -308,8 +308,8 @@ exports.loginAdmin = async (req, res) => {
     }
 
     // Check if user with email exists
-    const admin = await User.findOne({ email })
-    if (!admin) {
+    const user = await User.findOne({ email })
+    if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' })
     }
 
@@ -319,7 +319,7 @@ exports.loginAdmin = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' })
     } else {
       const token = jwt.sign(
-        { adminId: admin._id, email: admin.email, role: admin.role },
+        { adminId: user._id, email: user.email, role: user.role }, // Changed admin to user
         process.env.JWT_SECRET_KEY,
         { expiresIn: '1h' }
       )
@@ -327,7 +327,7 @@ exports.loginAdmin = async (req, res) => {
       res.status(200).json({
         message: 'Admin logged in successfully',
         token,
-        role: admin.role
+        role: user.role
       })
     }
   } catch (error) {

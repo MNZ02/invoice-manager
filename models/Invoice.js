@@ -1,20 +1,19 @@
 const mongoose = require('mongoose')
 
+const itemSchema = new mongoose.Schema({
+  name: String,
+  quantity: Number,
+  price: Number,
+  amount: Number
+})
+
 const invoiceSchema = new mongoose.Schema({
   user: {
-    // type: mongoose.Schema.Types.ObjectId,
     type: String,
     ref: 'User',
     required: true
   },
-  items: [
-    {
-      name: String,
-      quantity: Number,
-      price: Number,
-      amount: Number
-    }
-  ],
+  items: [itemSchema], // Using itemSchema for items array
   totalAmount: {
     type: Number,
     required: true
