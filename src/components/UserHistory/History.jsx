@@ -5,17 +5,18 @@ import api from '../../api/api'
 function History () {
   const [invoices, setInvoices] = useState([])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/api/invoices')
-        const data = response.data
-        console.log('response: ', response.data)
-        setInvoices(data)
-      } catch (error) {
-        console.error('Error fetching data: ', error)
-      }
+  const fetchData = async () => {
+    try {
+      const response = await api.get('/api/invoices')
+      const data = response.data
+      console.log('response: ', response.data)
+      setInvoices(data)
+    } catch (error) {
+      console.error('Error fetching data: ', error)
     }
+  }
+
+  useEffect(() => {
     fetchData()
   }, [])
 
@@ -24,7 +25,7 @@ function History () {
       <h1>Invoice</h1>
       {invoices.map((invoice, index) => (
         <div key={index}>
-          <InvoiceTable invoice={invoice} />
+          <InvoiceTable invoice={invoice} fetchData={fetchData} />
         </div>
       ))}
     </div>

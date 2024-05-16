@@ -22,7 +22,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   fontWeight: 'bold'
 }))
 
-const UserTable = ({ data }) => {
+const UserTable = ({ data, fetchData }) => {
   const [editMode, setEditMode] = useState(false)
   const [editedFields, setEditedFields] = useState({ ...data })
 
@@ -48,6 +48,7 @@ const UserTable = ({ data }) => {
       const userId = data._id
       const response = await api.put(`/api/users/${userId}`, editedFields)
       console.log('Data saved: ', response.data)
+      fetchData()
     } catch (error) {
       console.error('Error saving data: ', error)
     }
@@ -60,10 +61,25 @@ const UserTable = ({ data }) => {
     try {
       const response = await api.delete(`/api/users/${userId}`)
       console.log('Data deleted: ', response.data)
+      fetchData()
     } catch (error) {
       console.error('Error deleting data: ', error)
     }
   }
+
+  // Filtered fields to display
+  const filteredFields = [
+    'businessName',
+    'email',
+    'contact',
+    'bankName',
+    'bankAccountNumber',
+    'ifscCode',
+    'gst',
+    'address',
+    'bankAccountHolderName',
+    'role'
+  ]
 
   return (
     <>
@@ -117,23 +133,27 @@ const UserTable = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(data).map(([fieldName, value], index) => (
-              <TableRow key={index}>
-                <StyledTableCell>{fieldName}</StyledTableCell>
-                <TableCell>
-                  {editMode ? (
-                    <TextField
-                      value={editedFields[fieldName]}
-                      onChange={e =>
-                        handleFieldChange(fieldName, e.target.value)
-                      }
-                    />
-                  ) : (
-                    value
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+            {Object.entries(data).map(
+              ([fieldName, value], index) =>
+                // Check if the field is in the filteredFields array
+                filteredFields.includes(fieldName) && (
+                  <TableRow key={index}>
+                    <StyledTableCell>{fieldName}</StyledTableCell>
+                    <TableCell>
+                      {editMode ? (
+                        <TextField
+                          value={editedFields[fieldName]}
+                          onChange={e =>
+                            handleFieldChange(fieldName, e.target.value)
+                          }
+                        />
+                      ) : (
+                        value
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )
+            )}
           </TableBody>
         </Table>
       </TableContainer>

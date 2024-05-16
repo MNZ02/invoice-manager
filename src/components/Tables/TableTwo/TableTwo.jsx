@@ -20,17 +20,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const TableTwo = () => {
   const [data, setData] = useState([])
 
-  useEffect(() => {
-    async function fetchData () {
-      try {
-        const response = await api.get('/api/users')
-        const data = response.data
-        setData(data)
-        console.log(data)
-      } catch (error) {
-        console.error(error)
-      }
+  async function fetchData () {
+    try {
+      const response = await api.get('/api/users')
+      const data = response.data
+      setData(data)
+      console.log(data)
+    } catch (error) {
+      console.error(error)
     }
+  }
+  useEffect(() => {
     fetchData()
   }, [])
 
@@ -50,7 +50,7 @@ const TableTwo = () => {
       {data
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((data, index) => (
-          <UserTable key={index} data={data} />
+          <UserTable key={index} data={data} fetchData={fetchData} />
         ))}
       <TablePagination
         component='div'

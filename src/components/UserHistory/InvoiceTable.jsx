@@ -17,7 +17,6 @@ import { styled } from '@mui/system'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SaveIcon from '@mui/icons-material/Save'
-import { Style } from '@mui/icons-material'
 
 const StyledTableContainer = styled(TableContainer)(() => ({
   marginBottom: '20px'
@@ -27,7 +26,7 @@ const StyledTableCell = styled(TableCell)(() => ({
   borderBottom: 'none'
 }))
 
-const InvoiceTable = ({ invoice }) => {
+const InvoiceTable = ({ invoice, fetchData }) => {
   const {
     user,
     items,
@@ -79,6 +78,8 @@ const InvoiceTable = ({ invoice }) => {
 
       const response = await api.put(`api/invoices/${invoiceId}`, editedFields)
       console.log('Updated data: ', response.data)
+      setEditedFields(response.data)
+      fetchData()
     } catch (error) {
       console.error('Error updating data: ', error)
     }
@@ -101,6 +102,7 @@ const InvoiceTable = ({ invoice }) => {
       const invoiceId = invoice._id
       const response = await api.delete(`api/invoices/${invoiceId}`)
       console.log('Deleted data: ', response.data)
+      fetchData()
     } catch (error) {
       console.error('Error deleting data: ', error)
     }
