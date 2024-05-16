@@ -22,6 +22,7 @@ import Profile from './pages/Profile'
 import CreateInvoice from './pages/CreateInvoice'
 import AdminRoutes from './components/AdminRoutes/AdminRoutes'
 import { getUserRole } from './api/getUserRole'
+import CreateDataModal from './components/Tables/TableTwo/CreateDataModal'
 
 export default function App () {
   const token = localStorage.getItem('token')
@@ -105,6 +106,13 @@ export default function App () {
               path='/admin/users/tables'
               element={<AdminRoutes element={<Tables />} userRole={role} />}
             />
+            <Route
+              path='/admin/users/tables/create'
+              element={
+                <AdminRoutes element={<CreateDataModal />} userRole={role} />
+              }
+            />
+
             <Route path='*' element={<Error />} />
           </Routes>
         </State.Provider>

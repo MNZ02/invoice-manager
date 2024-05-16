@@ -285,6 +285,7 @@ const InvoiceTable = ({ invoice }) => {
               <StyledTableCell colSpan={2}>
                 <strong>Total:</strong>
               </StyledTableCell>
+              <StyledTableCell>-</StyledTableCell>
               <StyledTableCell align='right' colSpan={2}>
                 <strong>{totalAmount}</strong>
               </StyledTableCell>
