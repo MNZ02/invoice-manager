@@ -4,8 +4,38 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import DeleteModal from './DeleteModal'
 import { State } from '../context/stateContext'
-
+import api from '../api/api'
 export default function TableForm () {
+  const {
+    name,
+    setName,
+    address,
+    setAddress,
+    email,
+    setEmail,
+    phone,
+    setPhone,
+    bankName,
+    setBankName,
+    bankAccount,
+    setBankAccount,
+    website,
+    setWebsite,
+    clientName,
+    setClientName,
+    clientAddress,
+    setClientAddress,
+    invoiceNumber,
+    setInvoiceNumber,
+    invoiceDate,
+    setInvoiceDate,
+    dueDate,
+    setDueDate,
+    notes,
+    setNotes,
+    componentRef
+  } = useContext(State)
+
   const {
     description,
     setDescription,
@@ -22,6 +52,35 @@ export default function TableForm () {
     handleSubmit,
     editRow
   } = useContext(State)
+
+  const handleAddInvoice = async () => {
+    try {
+      const response = await api.post('/api/invoices', {
+        user: name,
+        address,
+        email,
+        phone,
+        website,
+        bankName,
+        bankAccount,
+        clientName,
+        clientAddress,
+        invoiceNumber,
+        invoiceDate,
+        dueDate,
+        notes,
+        totalAmount: total,
+        items: list,
+        description,
+        quantity,
+        price,
+        amount
+      })
+      console.log('response: ', response)
+    } catch (error) {
+      console.error('Error adding invoice: ', error)
+    }
+  }
 
   return (
     <>
@@ -92,29 +151,30 @@ export default function TableForm () {
             <td className='font-bold'>Amount</td>
           </tr>
         </thead>
-        {list && list.map(({ id, description, quantity, price, amount }) => (
-          <React.Fragment key={id}>
-            <tbody>
-              <tr className='h-10'>
-                <td>{description}</td>
-                <td>{quantity}</td>
-                <td>{price}</td>
-                <td className='amount'>{amount}</td>
-                <td>
-                  <button onClick={() => editRow(id)}>
-                    <AiOutlineEdit className='text-green-500 font-bold text-xl' />
-                  </button>
-                </td>
-                <td>
-                  <button onClick={() => setShowModal(true)}>
-                    <AiOutlineDelete className='text-red-500 font-bold text-xl' />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-            {showModal && <DeleteModal id={id} />}
-          </React.Fragment>
-        ))}
+        {list &&
+          list.map(({ id, description, quantity, price, amount }) => (
+            <React.Fragment key={id}>
+              <tbody>
+                <tr className='h-10'>
+                  <td>{description}</td>
+                  <td>{quantity}</td>
+                  <td>{price}</td>
+                  <td className='amount'>{amount}</td>
+                  <td>
+                    <button onClick={() => editRow(id)}>
+                      <AiOutlineEdit className='text-green-500 font-bold text-xl' />
+                    </button>
+                  </td>
+                  <td>
+                    <button onClick={() => setShowModal(true)}>
+                      <AiOutlineDelete className='text-red-500 font-bold text-xl' />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+              {showModal && <DeleteModal id={id} />}
+            </React.Fragment>
+          ))}
       </table>
 
       <div>
@@ -122,6 +182,12 @@ export default function TableForm () {
           Total : {total ? total.toLocaleString() : ''}
         </h2>
       </div>
+      <button
+        onClick={handleAddInvoice}
+        className='bg-blue-500 mb-5 text-white font-bold py-2 px-8 rounded hover:bg-blue-600 hover:text-white transition-all duration-150 hover:ring-4 hover:ring-blue-400'
+      >
+        Add Invoice
+      </button>
     </>
   )
 }

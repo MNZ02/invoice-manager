@@ -17,6 +17,7 @@ import { styled } from '@mui/system'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SaveIcon from '@mui/icons-material/Save'
+import { Style } from '@mui/icons-material'
 
 const StyledTableContainer = styled(TableContainer)(() => ({
   marginBottom: '20px'
@@ -115,6 +116,7 @@ const InvoiceTable = ({ invoice }) => {
               <StyledTableCell>Item Name</StyledTableCell>
               <StyledTableCell align='right'>Quantity</StyledTableCell>
               <StyledTableCell align='right'>Price</StyledTableCell>
+              <StyledTableCell align='right'>Amount</StyledTableCell>
               <StyledTableCell>Additional Notes</StyledTableCell>
               <StyledTableCell>Invoice Number</StyledTableCell>
               <StyledTableCell>Invoice Date</StyledTableCell>
@@ -138,6 +140,7 @@ const InvoiceTable = ({ invoice }) => {
               <StyledTableCell>-</StyledTableCell>
               <StyledTableCell>-</StyledTableCell>
               <StyledTableCell>-</StyledTableCell>
+              <StyledTableCell>-</StyledTableCell>
               <StyledTableCell>
                 {editMode ? (
                   <TextField
@@ -147,7 +150,7 @@ const InvoiceTable = ({ invoice }) => {
                     }
                   />
                 ) : (
-                  additionalNotes
+                  'N/A'
                 )}
               </StyledTableCell>
               <StyledTableCell>
@@ -214,8 +217,11 @@ const InvoiceTable = ({ invoice }) => {
                 </IconButton>
               </StyledTableCell>
             </TableRow>
+
             {editedFields.items.map((item, index) => (
               <TableRow key={item._id}>
+                <StyledTableCell>-</StyledTableCell>
+
                 <StyledTableCell>
                   {editMode ? (
                     <TextField
@@ -254,13 +260,25 @@ const InvoiceTable = ({ invoice }) => {
                     item.price
                   )}
                 </StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
+                <StyledTableCell align='right'>
+                  {editMode ? (
+                    <TextField
+                      type='number'
+                      value={item.amount}
+                      onChange={e =>
+                        handleItemFieldChange(index, 'amount', e.target.value)
+                      }
+                    />
+                  ) : (
+                    item.amount
+                  )}
+                </StyledTableCell>
+                <StyledTableCell>-</StyledTableCell>
+                <StyledTableCell>-</StyledTableCell>
+                <StyledTableCell>-</StyledTableCell>
+                <StyledTableCell>-</StyledTableCell>
+                <StyledTableCell>-</StyledTableCell>
+                <StyledTableCell>-</StyledTableCell>
               </TableRow>
             ))}
             <TableRow>
