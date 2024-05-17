@@ -31,7 +31,8 @@ const CreateDataForm = () => {
     ifscCode: '',
     gst: '',
     address: '',
-    bankAccountHolderName: ''
+    bankAccountHolderName: '',
+    logo: null
   })
 
   const handleChange = e => {
@@ -39,6 +40,14 @@ const CreateDataForm = () => {
     setFormData({
       ...formData,
       [name]: value
+    })
+  }
+
+  const handleFileChange = e => {
+    const file = e.target.files[0]
+    setFormData({
+      ...formData,
+      logo: file
     })
   }
 
@@ -222,6 +231,20 @@ const CreateDataForm = () => {
                 }
                 onChange={handleChange}
               />
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <Typography
+                variant='body1'
+                sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+                gutterBottom
+              >
+                Logo
+                <input
+                  type='file'
+                  accept='image/*'
+                  onChange={handleFileChange}
+                />
+              </Typography>
             </Grid>
           </Grid>
           <Button

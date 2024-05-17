@@ -1,12 +1,29 @@
-export default function Header() {
+import { useEffect } from 'react'
+import api from '../api/api'
+export default function Header () {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get('/api/users')
+        console.log(response.data)
+      } catch (error) {
+        console.error('Error fetching data: ', error)
+      }
+    }
+    fetchData()
+  }, [])
   return (
     <>
-      <header className="flex flex-col items-start justify-start mb-5 xl:flex-row xl:justify-start">
+      <header className='flex flex-col items-start justify-start mb-5 xl:flex-row xl:justify-start'>
         <div>
           {/* <h1 className="font-bold uppercase tracking-wide text-4xl mb-3">
             Logo
           </h1> */}
-          <img src="https://picsum.photos/600/200" className="h-auto max-w-full " alt=""/>
+          <img
+            src='https://picsum.photos/600/200'
+            className='h-auto max-w-full '
+            alt=''
+          />
         </div>
 
         {/* <div>
@@ -33,5 +50,5 @@ export default function Header() {
         </div> */}
       </header>
     </>
-  );
+  )
 }

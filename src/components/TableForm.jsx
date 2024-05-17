@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import DeleteModal from './DeleteModal'
 import { State } from '../context/stateContext'
 import api from '../api/api'
+
 export default function TableForm () {
   const {
     name,
@@ -87,7 +88,7 @@ export default function TableForm () {
       <ToastContainer position='top-right' theme='colored' />
 
       <form onSubmit={handleSubmit}>
-        <div className='flex flex-col md:mt-16'>
+        <div className='flex flex-col md:mt-8'>
           <label htmlFor='description'>Item description</label>
           <input
             type='text'
@@ -97,10 +98,11 @@ export default function TableForm () {
             maxLength={96}
             value={description}
             onChange={e => setDescription(e.target.value)}
+            className='p-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500'
           />
         </div>
 
-        <div className='md:grid grid-cols-3 gap-10'>
+        <div className='md:grid grid-cols-3 gap-6 mt-4'>
           <div className='flex flex-col'>
             <label htmlFor='quantity'>Quantity</label>
             <input
@@ -111,6 +113,7 @@ export default function TableForm () {
               maxLength={33}
               value={quantity}
               onChange={e => setQuantity(e.target.value)}
+              className='p-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500'
             />
           </div>
 
@@ -124,6 +127,7 @@ export default function TableForm () {
               maxLength={33}
               value={price}
               onChange={e => setPrice(e.target.value)}
+              className='p-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500'
             />
           </div>
 
@@ -134,57 +138,52 @@ export default function TableForm () {
         </div>
         <button
           type='submit'
-          className='bg-blue-500 mb-5 text-white font-bold py-2 px-8 rounded hover:bg-blue-600 hover:text-white transition-all duration-150 hover:ring-4 hover:ring-blue-400'
+          className='bg-blue-500 text-white font-bold py-2 px-8 rounded hover:bg-blue-600 hover:text-white transition-all duration-150 hover:ring-4 hover:ring-blue-400 mt-4'
         >
           {isEditing ? 'Finish Editing' : 'Add Table Item'}
         </button>
       </form>
 
       {/* Table items */}
-
-      <table width='100%' className='mb-10 overflow-auto'>
+      <table className='w-full mt-8'>
         <thead>
-          <tr className='bg-gray-100 p-1'>
-            <td className='font-bold'>Description</td>
-            <td className='font-bold'>Quantity</td>
-            <td className='font-bold'>Price</td>
-            <td className='font-bold'>Amount</td>
+          <tr className='bg-gray-100'>
+            <th className='py-2 px-4 font-semibold'>Description</th>
+            <th className='py-2 px-4 font-semibold'>Quantity</th>
+            <th className='py-2 px-4 font-semibold'>Price</th>
+            <th className='py-2 px-4 font-semibold'>Amount</th>
+            <th className='py-2 px-4 font-semibold'>Actions</th>
           </tr>
         </thead>
-        {list &&
-          list.map(({ id, description, quantity, price, amount }) => (
-            <React.Fragment key={id}>
-              <tbody>
-                <tr className='h-10'>
-                  <td>{description}</td>
-                  <td>{quantity}</td>
-                  <td>{price}</td>
-                  <td className='amount'>{amount}</td>
-                  <td>
-                    <button onClick={() => editRow(id)}>
-                      <AiOutlineEdit className='text-green-500 font-bold text-xl' />
-                    </button>
-                  </td>
-                  <td>
-                    <button onClick={() => setShowModal(true)}>
-                      <AiOutlineDelete className='text-red-500 font-bold text-xl' />
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-              {showModal && <DeleteModal id={id} />}
-            </React.Fragment>
-          ))}
+        <tbody>
+          {list &&
+            list.map(({ id, description, quantity, price, amount }) => (
+              <tr key={id} className='border-b border-gray-200'>
+                <td className='py-2 px-4'>{description}</td>
+                <td className='py-2 px-4'>{quantity}</td>
+                <td className='py-2 px-4'>{price}</td>
+                <td className='py-2 px-4'>{amount}</td>
+                <td className='py-2 px-4 flex justify-around'>
+                  <button onClick={() => editRow(id)}>
+                    <AiOutlineEdit className='text-green-500 text-lg' />
+                  </button>
+                  <button onClick={() => setShowModal(true)}>
+                    <AiOutlineDelete className='text-red-500 text-lg' />
+                  </button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
       </table>
 
-      <div>
-        <h2 className='flex items-end justify-end text-gray-800 text-4xl font-bold'>
-          Total : {total ? total.toLocaleString() : ''}
+      <div className='flex justify-end mt-4'>
+        <h2 className='text-gray-800 text-xl font-semibold'>
+          Total: {total ? total.toLocaleString() : ''}
         </h2>
       </div>
       <button
         onClick={handleAddInvoice}
-        className='bg-blue-500 mb-5 text-white font-bold py-2 px-8 rounded hover:bg-blue-600 hover:text-white transition-all duration-150 hover:ring-4 hover:ring-blue-400'
+        className='bg-blue-500 text-white font-bold py-2 px-8 rounded hover:bg-blue-600 hover:text-white transition-all duration-150 hover:ring-4 hover:ring-blue-400 mt-4'
       >
         Add Invoice
       </button>
