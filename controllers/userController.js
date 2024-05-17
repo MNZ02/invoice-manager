@@ -57,7 +57,7 @@ exports.createUser = [
           .status(400)
           .json({ message: 'User with this email already exists' })
       }
-
+      const hashedPassword = await bcrypt.hash(password, 10)
       // Handle logo upload
       const logoPath = req.file ? req.file.path : null
 
@@ -65,7 +65,7 @@ exports.createUser = [
       const newUser = new User({
         businessName,
         email,
-        password,
+        password: hashedPassword,
         contact,
         bankName,
         bankAccountNumber,
@@ -201,8 +201,7 @@ exports.registerUser = async (req, res) => {
       ifscCode,
       GST,
       address,
-      bankAccountHolderName,
-      role: 'user'
+      bankAccountHolderName
     })
     await newUser.save()
 
