@@ -23,6 +23,7 @@ import CreateInvoice from './pages/CreateInvoice'
 import AdminRoutes from './components/AdminRoutes/AdminRoutes'
 import { getUserRole } from './api/getUserRole'
 import CreateDataModal from './components/Tables/TableTwo/CreateDataModal'
+import CreatePlans from './components/SubscriptionPlanManager/CreatePlans'
 
 export default function App () {
   const token = localStorage.getItem('token')
@@ -101,6 +102,12 @@ export default function App () {
             <Route
               path='/admin/plans'
               element={<AdminRoutes element={<Plans />} userRole={role} />}
+            />
+            <Route
+              path='/admin/plans/create'
+              element={
+                <AdminRoutes element={<CreatePlans />} userRole={role} />
+              }
             />
             <Route
               path='/admin/users/tables'

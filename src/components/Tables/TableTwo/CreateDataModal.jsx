@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form'
 import api from '../../../api/api'
 import { useNavigate } from 'react-router-dom'
 import CloseIcon from '@mui/icons-material/Close'
+import DefaultLayout from '../../../layout/DefaultLayout'
 
 const CreateDataForm = () => {
   const navigate = useNavigate()
@@ -65,199 +66,201 @@ const CreateDataForm = () => {
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh'
-      }}
-    >
-      <Paper
-        elevation={3}
+    <DefaultLayout>
+      <Box
         sx={{
-          padding: '30px',
-          width: '100%',
-          maxWidth: '900px',
-          borderRadius: '10px'
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
         }}
       >
-        <div className='flex justify-between items-center'>
-          <Typography variant='h5' gutterBottom>
-            Create User
-          </Typography>
-          <IconButton
-            onClick={() => navigate('/admin/users/tables')}
-            aria-label='Close'
-          >
-            <CloseIcon />
-          </IconButton>
-        </div>
-        <Box
-          className='my-2 mx-2 py-2 px-1'
-          component='form'
-          onSubmit={handleSubmit(onSubmit)}
+        <Paper
+          elevation={3}
           sx={{
-            '& .MuiTextField-root': { marginBottom: '20px' }
+            padding: '30px',
+            width: '100%',
+            maxWidth: '900px',
+            borderRadius: '10px'
           }}
         >
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('businessName', { required: true })}
-                label='Business Name'
-                variant='outlined'
-                fullWidth
-                error={!!errors.businessName}
-                helperText={
-                  errors.businessName ? 'Business name is required' : ''
-                }
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('email', { required: true })}
-                label='Email'
-                type='email'
-                variant='outlined'
-                fullWidth
-                error={!!errors.email}
-                helperText={errors.email ? 'Email is required' : ''}
-                onChange={handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('password', {
-                  required: true,
-                  minLength: 6,
-                  maxLength: 16
-                })}
-                label='Password'
-                type='password'
-                variant='outlined'
-                fullWidth
-                error={!!errors.password}
-                helperText={
-                  errors.password
-                    ? 'Password is required and must be between 6 and 16 characters'
-                    : ''
-                }
-                onChange={handleChange}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('contact', { required: true })}
-                label='Contact'
-                variant='outlined'
-                fullWidth
-                error={!!errors.contact}
-                helperText={errors.contact ? 'Contact is required' : ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('bankName', { required: true })}
-                label='Bank Name'
-                variant='outlined'
-                fullWidth
-                error={!!errors.bankName}
-                helperText={errors.bankName ? 'Bank name is required' : ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('bankAccountNumber', { required: true })}
-                label='Bank Account Number'
-                variant='outlined'
-                fullWidth
-                error={!!errors.bankAccountNumber}
-                helperText={
-                  errors.bankAccountNumber
-                    ? 'Bank account number is required'
-                    : ''
-                }
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('ifscCode', { required: true })}
-                label='IFSC Code'
-                variant='outlined'
-                fullWidth
-                error={!!errors.ifscCode}
-                helperText={errors.ifscCode ? 'IFSC code is required' : ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('gst')}
-                label='GST'
-                variant='outlined'
-                fullWidth
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('address', { required: true })}
-                label='Address'
-                variant='outlined'
-                fullWidth
-                error={!!errors.address}
-                helperText={errors.address ? 'Address is required' : ''}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                {...register('bankAccountHolderName', { required: true })}
-                label='Bank Account Holder Name'
-                variant='outlined'
-                fullWidth
-                error={!!errors.bankAccountHolderName}
-                helperText={
-                  errors.bankAccountHolderName
-                    ? 'Account holder name is required'
-                    : ''
-                }
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={8}>
-              <Typography
-                variant='body1'
-                sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
-                gutterBottom
-              >
-                Logo
-                <input
-                  type='file'
-                  accept='image/*'
-                  onChange={handleFileChange}
-                />
-              </Typography>
-            </Grid>
-          </Grid>
-          <Button
-            type='submit'
-            color='primary'
-            variant='contained'
-            sx={{ alignSelf: 'flex-end', mt: 2 }}
+          <div className='flex justify-between items-center'>
+            <Typography variant='h5' gutterBottom>
+              Create User
+            </Typography>
+            <IconButton
+              onClick={() => navigate('/admin/users/tables')}
+              aria-label='Close'
+            >
+              <CloseIcon />
+            </IconButton>
+          </div>
+          <Box
+            className='my-2 mx-2 py-2 px-1'
+            component='form'
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{
+              '& .MuiTextField-root': { marginBottom: '20px' }
+            }}
           >
-            Create
-          </Button>
-        </Box>
-      </Paper>
-    </Box>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('businessName', { required: true })}
+                  label='Business Name'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.businessName}
+                  helperText={
+                    errors.businessName ? 'Business name is required' : ''
+                  }
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('email', { required: true })}
+                  label='Email'
+                  type='email'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.email}
+                  helperText={errors.email ? 'Email is required' : ''}
+                  onChange={handleChange}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('password', {
+                    required: true,
+                    minLength: 6,
+                    maxLength: 16
+                  })}
+                  label='Password'
+                  type='password'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.password}
+                  helperText={
+                    errors.password
+                      ? 'Password is required and must be between 6 and 16 characters'
+                      : ''
+                  }
+                  onChange={handleChange}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('contact', { required: true })}
+                  label='Contact'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.contact}
+                  helperText={errors.contact ? 'Contact is required' : ''}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('bankName', { required: true })}
+                  label='Bank Name'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.bankName}
+                  helperText={errors.bankName ? 'Bank name is required' : ''}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('bankAccountNumber', { required: true })}
+                  label='Bank Account Number'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.bankAccountNumber}
+                  helperText={
+                    errors.bankAccountNumber
+                      ? 'Bank account number is required'
+                      : ''
+                  }
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('ifscCode', { required: true })}
+                  label='IFSC Code'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.ifscCode}
+                  helperText={errors.ifscCode ? 'IFSC code is required' : ''}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('gst')}
+                  label='GST'
+                  variant='outlined'
+                  fullWidth
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('address', { required: true })}
+                  label='Address'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.address}
+                  helperText={errors.address ? 'Address is required' : ''}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('bankAccountHolderName', { required: true })}
+                  label='Bank Account Holder Name'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.bankAccountHolderName}
+                  helperText={
+                    errors.bankAccountHolderName
+                      ? 'Account holder name is required'
+                      : ''
+                  }
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <Typography
+                  variant='body1'
+                  sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+                  gutterBottom
+                >
+                  Logo
+                  <input
+                    type='file'
+                    accept='image/*'
+                    onChange={handleFileChange}
+                  />
+                </Typography>
+              </Grid>
+            </Grid>
+            <Button
+              type='submit'
+              color='primary'
+              variant='contained'
+              sx={{ alignSelf: 'flex-end', mt: 2 }}
+            >
+              Create
+            </Button>
+          </Box>
+        </Paper>
+      </Box>
+    </DefaultLayout>
   )
 }
 

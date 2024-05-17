@@ -22,7 +22,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   fontWeight: 'bold'
 }))
 
-const UserTable = ({ data, fetchData }) => {
+const UserTable = ({ data, fetchData, page, setPage }) => {
   const [editMode, setEditMode] = useState(false)
   const [editedFields, setEditedFields] = useState({ ...data })
 
@@ -61,6 +61,7 @@ const UserTable = ({ data, fetchData }) => {
     try {
       const response = await api.delete(`/api/users/${userId}`)
       console.log('Data deleted: ', response.data)
+      setPage(page - 1)
       fetchData()
     } catch (error) {
       console.error('Error deleting data: ', error)

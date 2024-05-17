@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useForm, FormProvider, useFormContext } from 'react-hook-form'
-
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Box,
@@ -17,8 +16,9 @@ import {
 } from '@mui/material'
 import 'tailwindcss/tailwind.css'
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumbs'
+import axios from 'axios'
 
-//custom theme
+// Custom theme
 const theme = createTheme({
   palette: {
     primary: {
@@ -200,15 +200,15 @@ const Step3 = () => {
         margin='normal'
       />
       <TextField
-        label='Account Holder Name'
-        {...register('accountHolderName', {
+        label='Bank Account Holder Name'
+        {...register('bankAccountHolderName', {
           pattern: {
             value: /^[a-zA-Z\s]*$/,
             message: 'Invalid Account Holder Name'
           }
         })}
-        error={!!errors.accountHolderName}
-        helperText={errors.accountHolderName?.message}
+        error={!!errors.bankAccountHolderName}
+        helperText={errors.bankAccountHolderName?.message}
         fullWidth
         margin='normal'
       />
@@ -232,12 +232,28 @@ const getStepContent = step => {
 const SignUp = () => {
   const [activeStep, setActiveStep] = useState(0)
   const methods = useForm()
+  const navigate = useNavigate()
   const { handleSubmit } = methods
+
+  const handleSave = async data => {
+    try {
+      console.log('Data being sent to the server:', data)
+      const response = await axios.post(
+        import.meta.env.VITE_REACT_API_ENDPOINT + '/api/register',
+        data
+      )
+      console.log('Server response:', response.data)
+      if (response.data) {
+        navigate('/users/dashboard')
+      }
+    } catch (error) {
+      console.error('Error signing up: ', error.response?.data || error.message)
+    }
+  }
 
   const handleNext = data => {
     if (activeStep === steps.length - 1) {
-      // Submit final data
-      console.log(data)
+      handleSave(data)
     } else {
       setActiveStep(prevActiveStep => prevActiveStep + 1)
     }

@@ -50,13 +50,21 @@ const TableTwo = () => {
       {data
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((data, index) => (
-          <UserTable key={index} data={data} fetchData={fetchData} />
+          <UserTable
+            key={index}
+            data={data}
+            fetchData={fetchData}
+            page={page}
+            setPage={setPage}
+          />
         ))}
       <TablePagination
         component='div'
-        count={pageCount}
+        count={data.length}
         page={page}
         onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[rowsPerPage]}
       />
     </div>
   )
