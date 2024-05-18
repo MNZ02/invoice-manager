@@ -1,12 +1,12 @@
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumbs'
-import DefaultLayout from '../layout/DefaultLayout'
 import CoverOne from '../images/cover/cover-01.png'
 import userSix from '../images/user/user-06.png'
 import { Link } from 'react-router-dom'
+import DefaultusersLayout from '../layout/DefaultusersLayout'
 
 const Profile = () => {
   return (
-    <DefaultLayout>
+    <DefaultusersLayout>
       <Breadcrumb pageName='Profile' />
 
       <div className='overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark'>
@@ -281,7 +281,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </DefaultusersLayout>
   )
 }
 

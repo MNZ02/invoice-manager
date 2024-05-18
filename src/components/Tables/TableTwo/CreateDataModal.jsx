@@ -53,9 +53,17 @@ const CreateDataForm = () => {
   }
 
   const onSubmit = async () => {
-    console.log('formData: ', formData)
+    const data = new FormData()
+    for (const key in formData) {
+      data.append(key, formData[key])
+    }
+
     try {
-      const response = await api.post('/api/users', formData)
+      const response = await api.post('/api/users', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
       console.log('response: ', response)
       if (response) {
         navigate('/admin/users/tables')
@@ -129,7 +137,6 @@ const CreateDataForm = () => {
                   onChange={handleChange}
                 />
               </Grid>
-
               <Grid item xs={12} sm={6}>
                 <TextField
                   {...register('password', {
@@ -150,7 +157,6 @@ const CreateDataForm = () => {
                   onChange={handleChange}
                 />
               </Grid>
-
               <Grid item xs={12} sm={6}>
                 <TextField
                   {...register('contact', { required: true })}

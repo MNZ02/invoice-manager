@@ -24,7 +24,7 @@ import AdminRoutes from './components/AdminRoutes/AdminRoutes'
 import { getUserRole } from './api/getUserRole'
 import CreateDataModal from './components/Tables/TableTwo/CreateDataModal'
 import CreatePlans from './components/SubscriptionPlanManager/CreatePlans'
-
+import { UserProivder } from './context/UserContext'
 export default function App () {
   const token = localStorage.getItem('token')
   const user = token ? true : false
@@ -35,93 +35,100 @@ export default function App () {
       <BrowserRouter>
         <ScrollToTop />
         <State.Provider value={State}>
-          <Routes>
-            <Route
-              path='/'
-              element={
-                <React.Fragment>
-                  {/* <Invoice /> */}
-                  {user ? (
-                    <>
-                      <SignUp />
-                      {/* <Header />
+          <UserProivder>
+            <Routes>
+              <Route
+                path='/'
+                element={
+                  <React.Fragment>
+                    {/* <Invoice /> */}
+                    {user ? (
+                      <>
+                        <SignUp />
+                        {/* <Header />
                       <Invoice /> */}
-                    </>
-                  ) : (
-                    <React.Fragment>
-                      <UserDashboard />
-                      {/* <Header />
+                      </>
+                    ) : (
+                      <React.Fragment>
+                        <UserDashboard />
+                        {/* <Header />
                       <Home />
                       <CallToAction />
                       <Footer /> */}
-                    </React.Fragment>
-                  )}
-                </React.Fragment>
-              }
-            ></Route>
-            <Route path='/about' element={<About />}></Route>
-            {/* <Route path="/suggestion-box" element={<SuggestionBox />}></Route> */}
-            {/* <Route path="/thank-you" element={<ThankYou />}></Route> */}
-            {/* <Route path="/cancelled" element={<Cancelled />}></Route> */}
-            <Route path='/' element={<Invoice />}></Route>
-            <Route element={<ProtectedRoutes />}>
-              <Route path='/users/dashboard' element={<UserDashboard />} />
+                      </React.Fragment>
+                    )}
+                  </React.Fragment>
+                }
+              ></Route>
+              <Route path='/about' element={<About />}></Route>
+              {/* <Route path="/suggestion-box" element={<SuggestionBox />}></Route> */}
+              {/* <Route path="/thank-you" element={<ThankYou />}></Route> */}
+              {/* <Route path="/cancelled" element={<Cancelled />}></Route> */}
+              <Route path='/' element={<Invoice />}></Route>
+              <Route element={<ProtectedRoutes />}>
+                <Route path='/users/dashboard' element={<UserDashboard />} />
+                <Route
+                  path='/users/dashboard/history'
+                  element={<UserHistory />}
+                />
+                <Route path='/users/dashboard/profile' element={<Profile />} />
+                <Route
+                  path='/users/dashboard/settings'
+                  element={<Settings />}
+                />
+                <Route
+                  path='/users/dashboard/create-invoice'
+                  element={<CreateInvoice />}
+                />
+              </Route>
               <Route
-                path='/users/dashboard/history'
-                element={<UserHistory />}
+                path='/auth/signin'
+                element={
+                  <>
+                    <SignIn />
+                  </>
+                }
               />
-              <Route path='/users/dashboard/profile' element={<Profile />} />
-              <Route path='/users/dashboard/settings' element={<Settings />} />
               <Route
-                path='/users/dashboard/create-invoice'
-                element={<CreateInvoice />}
+                path='/auth/signup'
+                element={
+                  <>
+                    <SignUp />
+                  </>
+                }
               />
-            </Route>
-            <Route
-              path='/auth/signin'
-              element={
-                <>
-                  <SignIn />
-                </>
-              }
-            />
-            <Route
-              path='/auth/signup'
-              element={
-                <>
-                  <SignUp />
-                </>
-              }
-            />
 
-            <Route
-              path='/admin/*'
-              element={<AdminRoutes element={<ECommerce />} userRole={role} />}
-            />
+              <Route
+                path='/admin/*'
+                element={
+                  <AdminRoutes element={<ECommerce />} userRole={role} />
+                }
+              />
 
-            <Route
-              path='/admin/plans'
-              element={<AdminRoutes element={<Plans />} userRole={role} />}
-            />
-            <Route
-              path='/admin/plans/create'
-              element={
-                <AdminRoutes element={<CreatePlans />} userRole={role} />
-              }
-            />
-            <Route
-              path='/admin/users/tables'
-              element={<AdminRoutes element={<Tables />} userRole={role} />}
-            />
-            <Route
-              path='/admin/users/tables/create'
-              element={
-                <AdminRoutes element={<CreateDataModal />} userRole={role} />
-              }
-            />
+              <Route
+                path='/admin/plans'
+                element={<AdminRoutes element={<Plans />} userRole={role} />}
+              />
+              <Route
+                path='/admin/plans/create'
+                element={
+                  <AdminRoutes element={<CreatePlans />} userRole={role} />
+                }
+              />
+              <Route
+                path='/admin/users/tables'
+                element={<AdminRoutes element={<Tables />} userRole={role} />}
+              />
+              <Route
+                path='/admin/users/tables/create'
+                element={
+                  <AdminRoutes element={<CreateDataModal />} userRole={role} />
+                }
+              />
 
-            <Route path='*' element={<Error />} />
-          </Routes>
+              <Route path='*' element={<Error />} />
+            </Routes>
+          </UserProivder>
         </State.Provider>
       </BrowserRouter>
     </Provider>

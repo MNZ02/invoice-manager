@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumbs'
-
-import DefaultLayout from '../layout/DefaultLayout'
+import DefaultusersLayout from '../layout/DefaultusersLayout'
 import api from '../api/api'
 import { getUserIdFromToken } from '../api/userIdFromToken'
 
@@ -52,7 +51,7 @@ const Settings = () => {
     }
   }
   return (
-    <DefaultLayout>
+    <DefaultusersLayout>
       <div className='mx-auto max-w-270'>
         <Breadcrumb pageName='Settings' />
 
@@ -265,7 +264,7 @@ const Settings = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </DefaultusersLayout>
   )
 }
 
