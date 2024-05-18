@@ -20,6 +20,7 @@ app.use(
     origin: 'http://localhost:5173'
   })
 )
+app.use('/uploads', express.static('uploads'))
 // Routes
 app.use('/api', userRoutes)
 app.use('/api', planRoutes)

@@ -7,6 +7,7 @@ const authenticateUser = require('../middleware/auth')
 // Create user route with validation
 router.post(
   '/users',
+
   [
     body('businessName').notEmpty().withMessage('Business name is required'),
     body('email').isEmail().withMessage('Invalid email address')

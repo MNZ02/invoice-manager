@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
-  businessLogo: String,
   businessName: {
     type: String,
     required: true,
@@ -23,6 +22,7 @@ const userSchema = new mongoose.Schema({
   GST: String,
   address: String,
   bankAccountHolderName: String,
+  businessLogo: String,
   role: {
     type: String,
     enum: ['admin', 'user'],

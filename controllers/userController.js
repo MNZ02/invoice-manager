@@ -3,19 +3,18 @@ const Plan = require('../models/Plan')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
-
 const multer = require('multer')
-const fs = require('fs')
 
-// Multer configuration for file upload
+//Set The Storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, './uploads/')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname)
+    cb(null, new Date().toISOString() + file.originalname)
   }
 })
+
 const upload = multer({ storage: storage })
 
 // Create user with validation and error handling
@@ -57,10 +56,10 @@ exports.createUser = [
           .status(400)
           .json({ message: 'User with this email already exists' })
       }
+
       const hashedPassword = await bcrypt.hash(password, 10)
       // Handle logo upload
       const logoPath = req.file ? req.file.path : null
-
       // Create user
       const newUser = new User({
         businessName,
@@ -73,8 +72,9 @@ exports.createUser = [
         GST,
         address,
         bankAccountHolderName,
-        logoPath
+        businessLogo: logoPath
       })
+
       await newUser.save()
 
       res.json({ message: 'User created successfully', user: newUser })
