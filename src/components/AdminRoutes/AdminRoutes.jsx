@@ -1,20 +1,17 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getUserRole } from '../../api/getUserRole'
 
 function AdminRoutes ({ element, userRole }) {
+  const role = getUserRole()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (userRole === 'admin') {
-      navigate('/admin/*')
+    if (role !== 'admin') {
+      navigate('/users/dashboard')
     }
-  }, [userRole, navigate])
+  }, [role, navigate])
 
-  if (userRole !== 'admin') {
-    navigate('/auth/signin')
-  }
-
-  return element
+  return <>{element}</>
 }
-
 export default AdminRoutes

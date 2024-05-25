@@ -42,7 +42,7 @@ const SignIn = () => {
       if (role === 'user') {
         navigate('/users/dashboard')
       } else if (role === 'admin') {
-        navigate('/admin/')
+        navigate('/admin')
       }
     } catch (error) {
       console.error('Login failed', error.message)

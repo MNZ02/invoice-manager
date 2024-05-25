@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Button,
   TextField,
@@ -22,24 +22,10 @@ const CreatePlans = () => {
     formState: { errors }
   } = useForm()
 
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: ''
-  })
-
-  const handleChange = e => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value
-    })
-  }
-
-  const onSubmit = async () => {
-    console.log('formData: ', formData)
+  const onSubmit = async data => {
+    console.log('formData: ', data)
     try {
-      const response = await api.post('/api/plans', formData)
+      const response = await api.post('/api/plans', data)
       console.log('response: ', response)
       if (response) {
         navigate('/admin/plans')
@@ -96,7 +82,6 @@ const CreatePlans = () => {
                   fullWidth
                   error={!!errors.name}
                   helperText={errors.name ? 'Plan name is required' : ''}
-                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -109,7 +94,6 @@ const CreatePlans = () => {
                   helperText={
                     errors.description ? 'Description is required' : ''
                   }
-                  onChange={handleChange}
                 />
               </Grid>
 
@@ -121,7 +105,16 @@ const CreatePlans = () => {
                   fullWidth
                   error={!!errors.price}
                   helperText={errors.price ? 'Price is required' : ''}
-                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('validity', { required: true })}
+                  label='Validity'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.validity}
+                  helperText={errors.validity ? 'Validity is required' : ''}
                 />
               </Grid>
             </Grid>

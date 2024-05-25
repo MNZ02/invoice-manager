@@ -99,6 +99,7 @@ const PlanTable = ({ plans, fetchData }) => {
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Price (INR)</TableCell>
+              <TableCell>Validity</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -139,6 +140,18 @@ const PlanTable = ({ plans, fetchData }) => {
                     />
                   ) : (
                     plan.price.toFixed(2)
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editMode === index ? (
+                    <TextField
+                      type='number'
+                      name='validity'
+                      value={editedFields[index]?.validity || ''}
+                      onChange={e => handleChange(e, index)}
+                    />
+                  ) : (
+                    plan.validity
                   )}
                 </TableCell>
                 <TableCell>

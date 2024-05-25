@@ -1,27 +1,33 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { TablePagination } from '@mui/material'
 import InvoiceTable from './InvoiceTable'
 import api from '../../api/api'
+import { ClipLoader } from 'react-spinners'
 
 function History () {
   const [invoices, setInvoices] = useState([])
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5) // Default rows per page
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
+    setLoading(true)
+    setError(null)
     try {
       const response = await api.get('/api/invoices')
-      const data = response.data
-      console.log('response: ', response.data)
-      setInvoices(data)
-    } catch (error) {
-      console.error('Error fetching data: ', error)
+      setInvoices(response.data)
+    } catch (err) {
+      setError('Error fetching data')
+      console.error('Error fetching data: ', err)
+    } finally {
+      setLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [fetchData])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -32,9 +38,28 @@ function History () {
     setPage(0)
   }
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
+        }}
+      >
+        <ClipLoader size={50} color={'#123abc'} loading={loading} />
+      </div>
+    )
+  }
+
+  if (error) {
+    return <div>{error}</div>
+  }
+
   return (
     <div>
-      <h1>Invoice</h1>
+      <h1>Invoices</h1>
       {invoices
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((invoice, index) => (
