@@ -4,6 +4,13 @@ const Plan = require('../models/Plan')
 exports.createPlan = async (req, res) => {
   try {
     const newPlan = new Plan(req.body)
+
+    const planExists = await Plan.find({ name: newPlan.name })
+
+    if (planExists.length > 0) {
+      return res.status(400).json({ message: 'Plan already exists' })
+    }
+
     await newPlan.save()
     res.status(201).json(newPlan)
   } catch (error) {

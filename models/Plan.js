@@ -3,13 +3,18 @@ const mongoose = require('mongoose')
 const planSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   description: {
     type: String,
     required: true
   },
   price: {
+    type: Number,
+    required: true
+  },
+  validity: {
     type: Number,
     required: true
   }

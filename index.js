@@ -7,7 +7,7 @@ const userRoutes = require('./routes/userRoutes')
 const planRoutes = require('./routes/planRoutes')
 const invoiceRoutes = require('./routes/invoiceRoutes')
 const subscriptionRoutes = require('./routes/subscriptionRoutes')
-
+const paymentRoutes = require('./routes/paymentRoutes')
 require('dotenv').config()
 
 const app = express()
@@ -26,6 +26,7 @@ app.use('/api', userRoutes)
 app.use('/api', planRoutes)
 app.use('/api', invoiceRoutes)
 app.use('/api', subscriptionRoutes)
+app.use('/api/payment', paymentRoutes)
 
 // Database connection
 mongoose
