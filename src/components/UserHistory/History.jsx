@@ -3,8 +3,11 @@ import { TablePagination } from '@mui/material'
 import InvoiceTable from './InvoiceTable'
 import api from '../../api/api'
 import { ClipLoader } from 'react-spinners'
+import { getUserIdFromToken } from '../../api/userIdFromToken'
 
 function History () {
+  const userId = getUserIdFromToken()
+
   const [invoices, setInvoices] = useState([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -15,7 +18,7 @@ function History () {
     setLoading(true)
     setError(null)
     try {
-      const response = await api.get('/api/invoices')
+      const response = await api.get(`/api/invoices/${userId}`)
       setInvoices(response.data)
     } catch (err) {
       setError('Error fetching data')

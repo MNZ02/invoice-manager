@@ -5,8 +5,10 @@ import 'react-toastify/dist/ReactToastify.css'
 import DeleteModal from './DeleteModal'
 import { State } from '../context/stateContext'
 import api from '../api/api'
+import { getUserIdFromToken } from '../api/userIdFromToken.js'
 
 export default function TableForm () {
+  const userId = getUserIdFromToken()
   const {
     name,
     setName,
@@ -57,7 +59,8 @@ export default function TableForm () {
   const handleAddInvoice = async () => {
     try {
       const response = await api.post('/api/invoices', {
-        user: name,
+        user: userId,
+        name: name,
         address,
         email,
         phone,

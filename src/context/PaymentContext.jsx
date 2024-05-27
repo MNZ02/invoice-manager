@@ -1,13 +1,22 @@
 import React, { createContext, useState } from 'react'
 import api from '../api/api'
+import { getUserIdFromToken } from '../api/userIdFromToken'
 import { useNavigate } from 'react-router-dom'
-
 const PaymentContext = createContext()
 
 export function PaymentProvider ({ children }) {
   const [selectedPlan, setSelectedPlan] = useState(null)
-
+  const [response, setResponse] = useState(false)
   const navigate = useNavigate()
+
+  const userId = getUserIdFromToken()
+
+  const updatePlan = async planId => {
+    const response = await api.put(`/api/users/${userId}`, {
+      selectedPlan: planId
+    })
+    console.log(response.data)
+  }
 
   const checkoutHandler = async (amount, plan) => {
     try {
@@ -40,7 +49,9 @@ export function PaymentProvider ({ children }) {
           })
 
           if (verifyResponse.data.status === 'success') {
+            await updatePlan(plan._id)
             setSelectedPlan(plan)
+            setResponse(true)
             navigate(
               `/users/dashboard/payment/success?reference=${verifyResponse.data.payment_id}`
             )
@@ -72,7 +83,9 @@ export function PaymentProvider ({ children }) {
     }
   }
   return (
-    <PaymentContext.Provider value={{ checkoutHandler, selectedPlan }}>
+    <PaymentContext.Provider
+      value={{ checkoutHandler, selectedPlan, response, updatePlan }}
+    >
       {children}
     </PaymentContext.Provider>
   )

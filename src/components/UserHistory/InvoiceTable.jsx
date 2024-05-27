@@ -28,7 +28,7 @@ const StyledTableCell = styled(TableCell)(() => ({
 
 const InvoiceTable = ({ invoice, fetchData }) => {
   const {
-    user,
+    name,
     items,
     totalAmount,
     additionalNotes,
@@ -41,7 +41,7 @@ const InvoiceTable = ({ invoice, fetchData }) => {
   // State to manage editable fields
   const [editMode, setEditMode] = useState(false)
   const [editedFields, setEditedFields] = useState({
-    user: user,
+    user: name,
     additionalNotes: additionalNotes,
     invoiceNumber: invoiceNumber,
     invoiceDate: invoiceDate,
@@ -132,11 +132,11 @@ const InvoiceTable = ({ invoice, fetchData }) => {
               <StyledTableCell>
                 {editMode ? (
                   <TextField
-                    value={editedFields.user}
-                    onChange={e => handleFieldChange('user', e.target.value)}
+                    value={editedFields.name}
+                    onChange={e => handleFieldChange('name', e.target.value)}
                   />
                 ) : (
-                  user
+                  name
                 )}
               </StyledTableCell>
               <StyledTableCell>-</StyledTableCell>

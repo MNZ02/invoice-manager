@@ -1,11 +1,24 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Box, Button, Typography, Paper, Grid, Divider } from '@mui/material'
+import {
+  Box,
+  Button,
+  Typography,
+  Paper,
+  Grid,
+  Divider,
+  CircularProgress
+} from '@mui/material'
 import api from '../../api/api'
 import PaymentContext from '../../context/PaymentContext'
+import { getUserIdFromToken } from '../../api/userIdFromToken'
 
 function UserSubscriptionPlanManager () {
+  const userId = getUserIdFromToken()
   const [plans, setPlans] = useState([])
-  const { checkoutHandler, selectedPlan } = useContext(PaymentContext)
+  const [userSelectedPlan, setUserSelectedPlan] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const { checkoutHandler, selectedPlan, response, updatePlan } =
+    useContext(PaymentContext)
 
   const fetchData = async () => {
     try {
@@ -16,12 +29,37 @@ function UserSubscriptionPlanManager () {
     }
   }
 
+  const fetchPlan = async () => {
+    try {
+      const response = await api.get(`/api/users/${userId}`)
+      setUserSelectedPlan(response.data.selectedPlan)
+    } catch (error) {
+      console.error('Error fetching user plan: ', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     fetchData()
+    fetchPlan()
   }, [])
-  useEffect(() => {
-    console.log('selectedPlan:', selectedPlan)
-  }, [selectedPlan])
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          minHeight: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+          bgcolor: '#F9FAFB'
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )
+  }
 
   return (
     <Box
@@ -58,7 +96,7 @@ function UserSubscriptionPlanManager () {
 
         <Grid container spacing={4}>
           {plans.map(plan => (
-            <Grid item xs={12} sm={6} md={4} key={plan.name}>
+            <Grid item xs={12} sm={6} md={4} key={plan._id}>
               <Paper
                 elevation={3}
                 sx={{
@@ -73,9 +111,7 @@ function UserSubscriptionPlanManager () {
                     boxShadow: '0 6px 12px rgba(0, 0, 0, 0.1)'
                   },
                   border:
-                    selectedPlan?.name === plan.name
-                      ? '2px solid #006EF5'
-                      : 'none'
+                    userSelectedPlan === plan._id ? '2px solid #006EF5' : 'none'
                 }}
               >
                 <Box sx={{ p: 3 }}>
@@ -89,14 +125,7 @@ function UserSubscriptionPlanManager () {
                         px: 1.5,
                         py: 0.5
                       }}
-                    >
-                      <Typography
-                        variant='caption'
-                        sx={{ color: '#00153B', fontWeight: 'bold' }}
-                      >
-                        {plan.type}
-                      </Typography>
-                    </Box>
+                    ></Box>
                   </Box>
                   <Typography
                     variant='h6'
@@ -113,17 +142,13 @@ function UserSubscriptionPlanManager () {
                   <Typography variant='body2' sx={{ color: '#717F87', mb: 2 }}>
                     {plan.description}
                   </Typography>
+                  <Typography
+                    variant='h5'
+                    sx={{ color: '#00153B', fontWeight: 'semi-bold', mb: 2 }}
+                  >
+                    {plan.validity} days
+                  </Typography>
                   <Divider sx={{ my: 2 }} />
-                  {plan.features &&
-                    plan.features.map((feature, index) => (
-                      <Typography
-                        key={index}
-                        variant='body2'
-                        sx={{ color: '#717F87' }}
-                      >
-                        {feature}
-                      </Typography>
-                    ))}
                 </Box>
                 <Box sx={{ mt: 'auto', p: 3 }}>
                   <Button
@@ -137,9 +162,7 @@ function UserSubscriptionPlanManager () {
                     }}
                     onClick={() => checkoutHandler(plan.price, plan)}
                   >
-                    {selectedPlan?.name === plan.name
-                      ? 'Selected'
-                      : 'Select Plan'}
+                    {userSelectedPlan === plan._id ? 'Selected' : 'Select Plan'}
                   </Button>
                 </Box>
               </Paper>

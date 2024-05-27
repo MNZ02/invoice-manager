@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useState, useContext, useEffect, useRef } from 'react'
 import ClientDetails from './ClientDetails'
 import Dates from './Dates'
 import Footer from './Footer'
@@ -10,8 +10,28 @@ import TableForm from './TableForm'
 import ReactToPrint from 'react-to-print'
 import { DonateButton } from '../buttons'
 import { State } from '../context/stateContext'
+import api from '../api/api'
+import { getUserIdFromToken } from '../api/userIdFromToken'
 
 function App () {
+  const userId = getUserIdFromToken()
+  const [data, setData] = useState({})
+  const componentRef = useRef()
+
+  const fetchUserData = async () => {
+    try {
+      const response = await api.get(`/api/users/${userId}`)
+      setData(response.data)
+      console.log(response.data)
+    } catch (error) {
+      console.error('Error fetching data: ', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchUserData()
+  }, [])
+
   const {
     name,
     setName,
@@ -25,8 +45,6 @@ function App () {
     setBankName,
     bankAccount,
     setBankAccount,
-    website,
-    setWebsite,
     clientName,
     setClientName,
     clientAddress,
@@ -38,9 +56,39 @@ function App () {
     dueDate,
     setDueDate,
     notes,
-    setNotes,
-    componentRef
+    setNotes
   } = useContext(State)
+
+  useEffect(() => {
+    if (data) {
+      setName(data.name || '')
+      setAddress(data.address || '')
+      setEmail(data.email || '')
+      setPhone(data.contact || '')
+      setBankName(data.bankName || '')
+      setBankAccount(data.bankAccountNumber || '')
+      setClientName(data.clientName || '')
+      setClientAddress(data.clientAddress || '')
+      setInvoiceNumber(data.invoiceNumber || '')
+      setInvoiceDate(data.invoiceDate || '')
+      setDueDate(data.dueDate || '')
+      setNotes(data.notes || '')
+    }
+  }, [
+    data,
+    setName,
+    setAddress,
+    setEmail,
+    setPhone,
+    setBankName,
+    setBankAccount,
+    setClientName,
+    setClientAddress,
+    setInvoiceNumber,
+    setInvoiceDate,
+    setDueDate,
+    setNotes
+  ])
 
   return (
     <main className='m-5 p-2 xl:grid grid-cols-2 gap-5 xl:items-start max-w-screen-3xl mx-auto'>
@@ -82,7 +130,7 @@ function App () {
               </div>
             </article>
 
-            <article className='md:grid grid-cols-3 gap-6'>
+            <article className='md:grid grid-cols-2 gap-6'>
               <div className='flex flex-col mb-4'>
                 <label htmlFor='email' className='mb-2 font-semibold'>
                   Email
@@ -99,22 +147,7 @@ function App () {
                   className='p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
                 />
               </div>
-              <div className='flex flex-col mb-4'>
-                <label htmlFor='website' className='mb-2 font-semibold'>
-                  Website
-                </label>
-                <input
-                  type='url'
-                  name='website'
-                  id='website'
-                  placeholder='Enter your website'
-                  maxLength={96}
-                  autoComplete='off'
-                  value={website}
-                  onChange={e => setWebsite(e.target.value)}
-                  className='p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500'
-                />
-              </div>
+
               <div className='flex flex-col mb-4'>
                 <label htmlFor='phone' className='mb-2 font-semibold'>
                   Phone
