@@ -18,6 +18,15 @@ export function PaymentProvider ({ children }) {
     console.log(response.data)
   }
 
+  const createTransaction = async transactionData => {
+    try {
+      const response = await api.post('/api/transactions', transactionData)
+      console.log('Transaction created', response.data)
+    } catch (error) {
+      console.error('Error creating transaction', error)
+    }
+  }
+
   const checkoutHandler = async (amount, plan) => {
     try {
       // Fetch the Razorpay key from the server
@@ -52,6 +61,17 @@ export function PaymentProvider ({ children }) {
             await updatePlan(plan._id)
             setSelectedPlan(plan)
             setResponse(true)
+            const transactionData = {
+              userId: userId,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              amount: order.amount,
+              currency: 'INR',
+              status: 'completed'
+            }
+            await createTransaction(transactionData)
+
             navigate(
               `/users/dashboard/payment/success?reference=${verifyResponse.data.payment_id}`
             )

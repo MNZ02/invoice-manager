@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Breadcrumb from '../../components/Breadcrumbs/Breadcrumbs'
 import DefaultusersLayout from '../../layout/DefaultusersLayout'
 import History from '../../components/UserHistory/History'
 import penSvg from '../../images/invoice/pen.svg'
@@ -13,6 +14,7 @@ function UserDashboard () {
   }
   return (
     <DefaultusersLayout>
+      <Breadcrumb pageName='Dashboard' />
       <div className='flex justify-end mx-2 my-2 px-2 py-1'>
         {isClicked ? (
           <button

@@ -8,10 +8,9 @@ const Settings = () => {
   const userId = getUserIdFromToken()
 
   const [userData, setUserData] = useState({
-    fullName: '',
-    contact: '',
-    email: '',
     businessName: '',
+    email: '',
+    contact: '',
     bankName: '',
     bankAccountNumber: '',
     ifscCode: '',
@@ -65,28 +64,26 @@ const Settings = () => {
               </div>
               <div className='p-7'>
                 <form action='#'>
-                  <div className='mb-5.5 flex flex-col gap-5.5 sm:flex-row'>
-                    <div className='w-full sm:w-1/2'>
-                      <label
-                        className='mb-3 block text-sm font-medium text-black dark:text-white'
-                        htmlFor='fullName'
-                      >
-                        Full Name
-                      </label>
-                      <div className='relative'>
-                        <input
-                          className='w-full rounded border border-stroke bg-gray py-3 pl-4 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary'
-                          type='text'
-                          name='fullName'
-                          id='fullName'
-                          value={userData.fullName}
-                          onChange={handleChange}
-                          placeholder='Full Name'
-                        />
-                      </div>
-                    </div>
+                  <div className='mb-5.5'>
+                    <label
+                      className='mb-3 block text-sm font-medium text-black dark:text-white'
+                      htmlFor='businessName'
+                    >
+                      Business Name
+                    </label>
+                    <input
+                      className='w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary'
+                      type='text'
+                      name='businessName'
+                      id='businessName'
+                      value={userData.businessName}
+                      onChange={handleChange}
+                      placeholder='Your Business Name'
+                    />
+                  </div>
 
-                    <div className='w-full sm:w-1/2'>
+                  <div className='mb-5.5 flex flex-col gap-5.5 sm:flex-row'>
+                    <div className='w-full'>
                       <label
                         className='mb-3 block text-sm font-medium text-black dark:text-white'
                         htmlFor='phoneNumber'
@@ -123,24 +120,6 @@ const Settings = () => {
                         placeholder='Email Address'
                       />
                     </div>
-                  </div>
-
-                  <div className='mb-5.5'>
-                    <label
-                      className='mb-3 block text-sm font-medium text-black dark:text-white'
-                      htmlFor='businessName'
-                    >
-                      Business Name
-                    </label>
-                    <input
-                      className='w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary'
-                      type='text'
-                      name='businessName'
-                      id='businessName'
-                      value={userData.businessName}
-                      onChange={handleChange}
-                      placeholder='Your Business Name'
-                    />
                   </div>
 
                   <div className='mb-5.5'>

@@ -155,10 +155,18 @@ function UserSubscriptionPlanManager () {
                     fullWidth
                     variant='contained'
                     sx={{
-                      backgroundColor: '#006EF5',
+                      backgroundColor:
+                        userSelectedPlan === plan._id ? '#FFFFFF' : '#006EF5',
+                      color:
+                        userSelectedPlan === plan._id ? '#006EF5' : '#FFFFFF',
                       '&:hover': {
-                        backgroundColor: '#0056C2'
-                      }
+                        backgroundColor:
+                          userSelectedPlan === plan._id ? '#FFFFFF' : '#0056C2',
+                        cursor:
+                          userSelectedPlan === plan._id ? 'default' : 'pointer'
+                      },
+                      pointerEvents:
+                        userSelectedPlan === plan._id ? 'none' : 'auto'
                     }}
                     onClick={() => checkoutHandler(plan.price, plan)}
                   >
