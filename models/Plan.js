@@ -17,6 +17,11 @@ const planSchema = new mongoose.Schema({
   validity: {
     type: Number,
     required: true
+  },
+  frequency: {
+    type: String,
+    required: true,
+    enum: ['monthly', 'quarterly', 'annually']
   }
 })
 

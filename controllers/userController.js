@@ -255,9 +255,29 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: '1h' }
+      { expiresIn: '4h' }
     )
-    res.json({ token, role: user.role })
+    const refreshToken = jwt.sign(
+      {
+        userId: user._id,
+        email: user.email,
+        role: user.role
+      },
+      process.env.JWT_REFRESH_SECRET_KEY,
+      { expiresIn: '1d' }
+    )
+
+    user.refreshToken = refreshToken
+    await user.save()
+    const expiryDate = new Date()
+    expiryDate.setHours(expiryDate.getMinutes() + 1)
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      expires: expiryDate
+    })
+    res.json({ token, expiryDate, refreshToken, role: user.role })
   } catch (error) {
     console.error('Error during login:', error)
     res.status(500).json({ message: 'Internal server error' })

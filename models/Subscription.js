@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const subscriptionSchema = new mongoose.Schema({
   user: {
@@ -15,9 +15,16 @@ const subscriptionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  endDate: Date
-});
+  endDate: {
+    type: Date,
+    required: true
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  }
+})
 
-const Subscription = mongoose.model('Subscription', subscriptionSchema);
+const Subscription = mongoose.model('Subscription', subscriptionSchema)
 
-module.exports = Subscription;
+module.exports = Subscription

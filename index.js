@@ -8,16 +8,23 @@ const planRoutes = require('./routes/planRoutes')
 const invoiceRoutes = require('./routes/invoiceRoutes')
 const subscriptionRoutes = require('./routes/subscriptionRoutes')
 const paymentRoutes = require('./routes/paymentRoutes')
+const transactionRoutes = require('./routes/transactionRoutes')
+const refreshTokenRoute = require('./routes/refreshTokenRoute')
+const cookieParser = require('cookie-parser')
 require('dotenv').config()
+
+require('./cronjobs/cronJobs')
 
 const app = express()
 
 // Middleware
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
-    origin: 'http://localhost:5173'
+    origin: true,
+    credentials: true
   })
 )
 app.use('/uploads', express.static('uploads'))
@@ -27,6 +34,8 @@ app.use('/api', planRoutes)
 app.use('/api', invoiceRoutes)
 app.use('/api', subscriptionRoutes)
 app.use('/api/payment', paymentRoutes)
+app.use('/api', transactionRoutes)
+// app.use('/api/auth', refreshTokenRoute)
 
 // Database connection
 mongoose

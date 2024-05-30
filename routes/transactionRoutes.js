@@ -1,28 +1,21 @@
 const express = require('express')
 const router = express.Router()
 const authenticateUser = require('../middleware/auth')
-const paymentController = require('../controllers/paymentController')
+const transactionController = require('../controllers/transactionController')
 const refreshTokenMiddleware = require('../middleware/refreshToken')
 
-router.post(
-  '/orders',
-  refreshTokenMiddleware,
-  authenticateUser,
-  paymentController.createOrder
-)
-
-router.post(
-  '/verification',
-  refreshTokenMiddleware,
-  authenticateUser,
-  paymentController.paymentVerification
-)
-
 router.get(
-  '/getKey',
+  '/users/:userId/transactions',
   refreshTokenMiddleware,
   authenticateUser,
-  paymentController.getKey
+  transactionController.getTransaction
+)
+
+router.post(
+  '/transactions',
+  refreshTokenMiddleware,
+  authenticateUser,
+  transactionController.createTransaction
 )
 
 module.exports = router

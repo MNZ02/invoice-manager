@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { refreshToken } = require('../controllers/refreshTokenController')
 
 const userSchema = new mongoose.Schema({
   businessName: {
@@ -31,6 +32,16 @@ const userSchema = new mongoose.Schema({
   selectedPlan: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Plan'
+  },
+  transactions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Transaction'
+    }
+  ],
+  refreshToken: {
+    type: String,
+    default: null
   }
 })
 

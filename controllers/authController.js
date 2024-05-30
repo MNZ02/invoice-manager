@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { JWT_SECRET_KEY } = require('../config')
+const { JWT_SECRET_KEY, JWT_REFRESH_SECRET_KEY } = require('../config')
 
 const User = require('../models/User')
 
@@ -32,6 +32,19 @@ exports.login = async (req, res) => {
       JWT_SECRET_KEY,
       { expiresIn: '1h' }
     )
+    const refreshToken = jwt.sign(
+      {
+        userId: user._id,
+        email: user.email
+      },
+      JWT_REFRESH_SECRET_KEY,
+      { expiresIn: '1d' }
+    )
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
+    })
     res.json({ token })
   } catch (error) {
     console.error('Error during login:', error)
