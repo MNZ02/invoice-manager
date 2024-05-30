@@ -11,7 +11,9 @@ import {
   Button,
   IconButton,
   Box,
-  TextField
+  TextField,
+  MenuItem,
+  Select
 } from '@mui/material'
 import { Edit, Delete, Add, Save } from '@mui/icons-material'
 import api from '../../api/api'
@@ -100,6 +102,7 @@ const PlanTable = ({ plans, fetchData }) => {
               <TableCell>Description</TableCell>
               <TableCell>Price (INR)</TableCell>
               <TableCell>Validity</TableCell>
+              <TableCell>Frequency</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -152,6 +155,21 @@ const PlanTable = ({ plans, fetchData }) => {
                     />
                   ) : (
                     plan.validity
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editMode === index ? (
+                    <Select
+                      name='frequency'
+                      value={editedFields[index]?.frequency || ''}
+                      onChange={e => handleChange(e, index)}
+                    >
+                      <MenuItem value='monthly'>Monthly</MenuItem>
+                      <MenuItem value='quarterly'>Quarterly</MenuItem>
+                      <MenuItem value='annually'>Annually</MenuItem>
+                    </Select>
+                  ) : (
+                    plan.frequency
                   )}
                 </TableCell>
                 <TableCell>

@@ -1,20 +1,44 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumbs'
 import DefaultusersLayout from '../../layout/DefaultusersLayout'
 import History from '../../components/UserHistory/History'
 import penSvg from '../../images/invoice/pen.svg'
+import api from '../../api/api'
+import { getUserIdFromToken } from '../../api/userIdFromToken'
+
 function UserDashboard () {
+  const userId = getUserIdFromToken()
   const [isClicked, setIsClicked] = useState(false)
+  const [isSubscriptionActive, setIsSubscriptionActive] = useState(false)
+
+  const fetchSubscription = async () => {
+    try {
+      const response = await api.get(`/api/subscriptions/${userId}`)
+      setIsSubscriptionActive(response.data.isActive)
+    } catch (error) {
+      console.error('Error fetching subscription', error)
+    }
+  }
+
   const navigate = useNavigate()
 
   const handleClick = () => {
-    setIsClicked(!isClicked)
-    isClicked ? null : navigate('/users/dashboard/create-invoice')
+    if (isSubscriptionActive) {
+      setIsClicked(!isClicked)
+      isClicked ? null : navigate('/users/dashboard/create-invoice')
+    } else {
+      navigate('/users/dashboard/plans')
+    }
   }
+
+  useEffect(() => {
+    fetchSubscription()
+  }, [])
   return (
     <DefaultusersLayout>
       <Breadcrumb pageName='Dashboard' />
+
       <div className='flex justify-end mx-2 my-2 px-2 py-1'>
         {isClicked ? (
           <button

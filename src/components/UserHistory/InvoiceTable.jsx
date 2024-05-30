@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import api from '../../api/api'
 import {
   Table,
@@ -27,6 +27,9 @@ const StyledTableCell = styled(TableCell)(() => ({
 }))
 
 const InvoiceTable = ({ invoice, fetchData }) => {
+  useEffect(() => {
+    console.log(items)
+  }, [])
   const {
     name,
     items,

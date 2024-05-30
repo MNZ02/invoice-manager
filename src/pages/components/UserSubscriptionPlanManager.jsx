@@ -6,7 +6,9 @@ import {
   Paper,
   Grid,
   Divider,
-  CircularProgress
+  CircularProgress,
+  ToggleButtonGroup,
+  ToggleButton
 } from '@mui/material'
 import api from '../../api/api'
 import PaymentContext from '../../context/PaymentContext'
@@ -15,10 +17,11 @@ import { getUserIdFromToken } from '../../api/userIdFromToken'
 function UserSubscriptionPlanManager () {
   const userId = getUserIdFromToken()
   const [plans, setPlans] = useState([])
+  const [subscription, setSubscription] = useState(null)
   const [userSelectedPlan, setUserSelectedPlan] = useState(null)
   const [loading, setLoading] = useState(true)
-  const { checkoutHandler, selectedPlan, response, updatePlan } =
-    useContext(PaymentContext)
+  const [frequency, setFrequency] = useState('monthly') // Default frequency
+  const { checkoutHandler } = useContext(PaymentContext)
 
   const fetchData = async () => {
     try {
@@ -40,10 +43,26 @@ function UserSubscriptionPlanManager () {
     }
   }
 
+  const fetchSubscription = async () => {
+    try {
+      const response = await api.get(`/api/subscriptions/${userId}`)
+      setSubscription(response.data)
+    } catch (error) {
+      console.error('Error fetching subscription', error)
+    }
+  }
+
   useEffect(() => {
     fetchData()
     fetchPlan()
+    fetchSubscription()
   }, [])
+
+  const handleFrequencyChange = (event, newFrequency) => {
+    if (newFrequency !== null) {
+      setFrequency(newFrequency)
+    }
+  }
 
   if (loading) {
     return (
@@ -60,6 +79,9 @@ function UserSubscriptionPlanManager () {
       </Box>
     )
   }
+
+  // Filter plans by selected frequency
+  const filteredPlans = plans.filter(plan => plan.frequency === frequency)
 
   return (
     <Box
@@ -94,8 +116,19 @@ function UserSubscriptionPlanManager () {
           Choose the plan that suits you best and enjoy our premium services.
         </Typography>
 
+        <ToggleButtonGroup
+          value={frequency}
+          exclusive
+          onChange={handleFrequencyChange}
+          sx={{ mb: 4 }}
+        >
+          <ToggleButton value='quarterly'>Quarterly</ToggleButton>
+          <ToggleButton value='monthly'>Monthly</ToggleButton>
+          <ToggleButton value='annually'>Annually</ToggleButton>
+        </ToggleButtonGroup>
+
         <Grid container spacing={4}>
-          {plans.map(plan => (
+          {filteredPlans.map(plan => (
             <Grid item xs={12} sm={6} md={4} key={plan._id}>
               <Paper
                 elevation={3}
@@ -111,7 +144,10 @@ function UserSubscriptionPlanManager () {
                     boxShadow: '0 6px 12px rgba(0, 0, 0, 0.1)'
                   },
                   border:
-                    userSelectedPlan === plan._id ? '2px solid #006EF5' : 'none'
+                    subscription?.isActive &&
+                    subscription?.plan?._id === plan._id
+                      ? '2px solid #006EF5'
+                      : 'none'
                 }}
               >
                 <Box sx={{ p: 3 }}>
@@ -156,21 +192,36 @@ function UserSubscriptionPlanManager () {
                     variant='contained'
                     sx={{
                       backgroundColor:
-                        userSelectedPlan === plan._id ? '#FFFFFF' : '#006EF5',
+                        subscription?.isActive &&
+                        subscription?.plan?._id === plan._id
+                          ? '#FFFFFF'
+                          : '#006EF5',
                       color:
-                        userSelectedPlan === plan._id ? '#006EF5' : '#FFFFFF',
+                        subscription?.isActive &&
+                        subscription?.plan?._id === plan._id
+                          ? '#006EF5'
+                          : '#FFFFFF',
                       '&:hover': {
                         backgroundColor:
-                          userSelectedPlan === plan._id ? '#FFFFFF' : '#0056C2',
+                          subscription?.isActive &&
+                          subscription?.plan?._id === plan._id
+                            ? '#FFFFFF'
+                            : '#0056C2',
                         cursor:
-                          userSelectedPlan === plan._id ? 'default' : 'pointer'
+                          subscription?.isActive &&
+                          subscription?.plan?._id === plan._id
+                            ? 'default'
+                            : 'pointer'
                       },
                       pointerEvents:
-                        userSelectedPlan === plan._id ? 'none' : 'auto'
+                        subscription?.plan?._id === plan._id ? 'none' : 'auto'
                     }}
                     onClick={() => checkoutHandler(plan.price, plan)}
                   >
-                    {userSelectedPlan === plan._id ? 'Selected' : 'Select Plan'}
+                    {subscription?.isActive &&
+                    subscription?.plan?._id === plan._id
+                      ? 'Selected'
+                      : 'Select Plan'}
                   </Button>
                 </Box>
               </Paper>

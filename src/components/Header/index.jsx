@@ -1,9 +1,21 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import DropdownUser from './DropdownUser'
 import LogoIcon from '../../images/logo/logo-icon.svg'
+import { getUserRole } from '../../api/getUserRole'
 
 const Header = props => {
+  const userRole = getUserRole()
+  const navigate = useNavigate()
+
+  const handleUser = () => {
+    if (userRole === 'admin') {
+      navigate('/admin')
+    } else {
+      navigate('/')
+    }
+  }
+
   return (
     <header className='sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none'>
       <div className='flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11'>
@@ -59,9 +71,9 @@ const Header = props => {
         </div>
 
         <div className='flex items-center gap-3 2xsm:gap-7'>
-          <Link to='/users/dashboard'>
-            <h2 className='cursor-pointer'>Home</h2>
-          </Link>
+          <h2 onClick={handleUser} className='cursor-pointer'>
+            Home
+          </h2>
           <Link to='/about'>
             <h2 className='cursor-pointer'>About invoicer</h2>
           </Link>

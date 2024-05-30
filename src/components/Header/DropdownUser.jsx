@@ -39,6 +39,7 @@ const DropdownUser = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token')
+    localStorage.removeItem('expiryDate')
     navigate('/auth/signin')
     dispatch(logout())
   }

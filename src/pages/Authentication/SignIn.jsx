@@ -33,8 +33,10 @@ const SignIn = () => {
 
       //set token
       const token = response.data.token
+      const expiryDate = response.data.expiryDate
       localStorage.setItem('token', token)
-      console.log(token)
+
+      localStorage.setItem('expiryDate', expiryDate)
 
       //set user redux
       const role = response.data.role

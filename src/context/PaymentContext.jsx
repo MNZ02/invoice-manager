@@ -18,6 +18,16 @@ export function PaymentProvider ({ children }) {
     console.log(response.data)
   }
 
+  const subscribeUser = async (userId, planId) => {
+    try {
+      const response = await api.post('/api/subscribe', { userId, planId })
+      return response.data
+    } catch (error) {
+      console.error('Error subscribing user:', error)
+      throw error
+    }
+  }
+
   const createTransaction = async transactionData => {
     try {
       const response = await api.post('/api/transactions', transactionData)
@@ -28,11 +38,12 @@ export function PaymentProvider ({ children }) {
   }
 
   const checkoutHandler = async (amount, plan) => {
+    console.log(plan._id)
     try {
       // Fetch the Razorpay key from the server
       const keyResponse = await api.get('/api/payment/getKey')
       const key_id = keyResponse.data.key_id
-      console.log('key_id:', key_id)
+
       if (!key_id) {
         console.error('Error: Missing key_id from server response')
         return
@@ -63,14 +74,17 @@ export function PaymentProvider ({ children }) {
             setResponse(true)
             const transactionData = {
               userId: userId,
+              planId: plan._id,
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               amount: order.amount,
               currency: 'INR',
-              status: 'completed'
+              status: 'completed',
+              createdAt: new Date()
             }
             await createTransaction(transactionData)
+            await subscribeUser(userId, plan._id)
 
             navigate(
               `/users/dashboard/payment/success?reference=${verifyResponse.data.payment_id}`

@@ -6,9 +6,13 @@ import {
   Typography,
   Paper,
   Grid,
-  IconButton
+  IconButton,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel
 } from '@mui/material'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import api from '../../api/api'
 import { useNavigate } from 'react-router-dom'
 import CloseIcon from '@mui/icons-material/Close'
@@ -19,6 +23,7 @@ const CreatePlans = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors }
   } = useForm()
 
@@ -59,7 +64,7 @@ const CreatePlans = () => {
               Create Plan
             </Typography>
             <IconButton
-              onClick={() => navigate('/admin/users/tables')}
+              onClick={() => navigate('/admin/plans')}
               aria-label='Close'
             >
               <CloseIcon />
@@ -116,6 +121,34 @@ const CreatePlans = () => {
                   error={!!errors.validity}
                   helperText={errors.validity ? 'Validity is required' : ''}
                 />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth>
+                  <InputLabel id='frequency-label'>Frequency</InputLabel>
+                  <Controller
+                    name='frequency'
+                    control={control}
+                    defaultValue=''
+                    rules={{ required: 'Frequency is required' }}
+                    render={({ field }) => (
+                      <Select
+                        labelId='frequency-label'
+                        label='Frequency'
+                        {...field}
+                        error={!!errors.frequency}
+                      >
+                        <MenuItem value='monthly'>Monthly</MenuItem>
+                        <MenuItem value='quarterly'>Quarterly</MenuItem>
+                        <MenuItem value='annually'>Annually</MenuItem>
+                      </Select>
+                    )}
+                  />
+                  {errors.frequency && (
+                    <Typography color='error'>
+                      {errors.frequency.message}
+                    </Typography>
+                  )}
+                </FormControl>
               </Grid>
             </Grid>
             <Button

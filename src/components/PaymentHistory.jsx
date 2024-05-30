@@ -8,7 +8,8 @@ import {
   TableHead,
   TableBody,
   TableRow,
-  TableCell
+  TableCell,
+  Tab
 } from '@mui/material'
 import api from '../api/api'
 import { getUserIdFromToken } from '../api/userIdFromToken'
@@ -21,6 +22,7 @@ function PaymentHistory () {
   const fetchPaymentHistory = async () => {
     try {
       const response = await api.get(`/api/users/${userId}/transactions`)
+      console.log(response.data)
       setPaymentHistory(response.data)
     } catch (error) {
       console.error('Error fetching payment history: ', error)
@@ -76,7 +78,8 @@ function PaymentHistory () {
               <TableCell>Transaction ID</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Status</TableCell>
-              {/* Add more table headers if needed */}
+              <TableCell>Date & Time</TableCell>
+              <TableCell>Expiry Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -85,7 +88,12 @@ function PaymentHistory () {
                 <TableCell>{payment._id}</TableCell>
                 <TableCell>{payment.amount}</TableCell>
                 <TableCell>{payment.status}</TableCell>
-                {/* Add more table cells for other payment details */}
+                <TableCell>
+                  {new Date(payment.createdAt).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  {new Date(payment.expiryDate).toLocaleDateString()}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

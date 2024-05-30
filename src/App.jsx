@@ -48,13 +48,13 @@ export default function App () {
                       {/* <Invoice /> */}
                       {user ? (
                         <>
-                          <SignUp />
+                          <UserDashboard />
                           {/* <Header />
                       <Invoice /> */}
                         </>
                       ) : (
                         <React.Fragment>
-                          <UserDashboard />
+                          <SignUp />
                           {/* <Header />
                       <Home />
                       <CallToAction />

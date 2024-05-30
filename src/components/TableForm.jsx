@@ -6,9 +6,11 @@ import DeleteModal from './DeleteModal'
 import { State } from '../context/stateContext'
 import api from '../api/api'
 import { getUserIdFromToken } from '../api/userIdFromToken.js'
+import { useNavigate } from 'react-router-dom'
 
 export default function TableForm () {
   const userId = getUserIdFromToken()
+  const navigate = useNavigate()
   const {
     name,
     setName,
@@ -80,7 +82,7 @@ export default function TableForm () {
         price,
         amount
       })
-      console.log('response: ', response)
+      navigate('/users/dashboard')
     } catch (error) {
       console.error('Error adding invoice: ', error)
     }
