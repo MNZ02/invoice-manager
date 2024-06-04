@@ -22,7 +22,7 @@ const invoiceSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  additionalNotes: String,
+  notes: String,
   invoiceNumber: {
     type: String,
     unique: true

@@ -18,6 +18,10 @@ const planSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  maxInvoices: {
+    type: Number,
+    required: true
+  },
   frequency: {
     type: String,
     required: true,

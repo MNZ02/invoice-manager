@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema({
   refreshToken: {
     type: String,
     default: null
+  },
+  createdInvoices: {
+    type: Number,
+    default: 0
   }
 })
 

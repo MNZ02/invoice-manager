@@ -1,10 +1,15 @@
 const Invoice = require('../models/Invoice')
-
+const User = require('../models/User')
 // Create a new invoice
 exports.createInvoice = async (req, res) => {
   try {
     const newInvoice = new Invoice(req.body)
     await newInvoice.save()
+
+    const user = await User.findById(req.params.userId)
+    user.createdInvoices += 1
+    await user.save()
+
     res.status(201).json(newInvoice)
   } catch (error) {
     console.error(error)
@@ -37,6 +42,7 @@ exports.getInvoiceByUserId = async (req, res) => {
 exports.getInvoiceById = async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id)
+    console.log(invoice)
     if (!invoice) {
       return res.status(404).json({ message: 'Invoice not found' })
     }
@@ -75,6 +81,49 @@ exports.deleteInvoiceById = async (req, res) => {
     res.status(200).json({ message: 'Invoice deleted successfully' })
   } catch (error) {
     console.error(error)
+    res.status(500).json({ message: 'Internal server error' })
+  }
+}
+
+exports.remainingInvoices = async (req, res) => {
+  try {
+    const userId = req.params.userId
+    const user = await User.findById(userId).populate({
+      path: 'selectedPlan',
+      select: 'maxInvoices'
+    })
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    const plan = user.selectedPlan
+
+    if (!plan) {
+      return res.status(404).json({ message: 'Plan not found' })
+    }
+
+    const remainingInvoices = plan.maxInvoices - user.createdInvoices
+
+    res.status(200).json({ remainingInvoices })
+  } catch (error) {
+    console.error('Error checking invoice limit:', error)
+    res.status(500).json({ message: 'Internal server error' })
+  }
+}
+
+exports.resetInvoiceCount = async (req, res) => {
+  try {
+    const userId = req.params.userId
+    const user = await User.findByIdAndUpdate(userId, { createdInvoices: 0 })
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    res.status(200).json({ message: 'Invoice count reset successfully' })
+  } catch (error) {
+    console.error('Error resetting invoice count:', error)
     res.status(500).json({ message: 'Internal server error' })
   }
 }
