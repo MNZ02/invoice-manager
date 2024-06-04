@@ -28,6 +28,7 @@ import { UserProivder } from './context/UserContext'
 import { PaymentProvider } from './context/PaymentContext'
 import UserPlans from './pages/UserPlans'
 import PaymentsSuccessPage from './pages/PaymentSuccessPage'
+import ViewInvoices from './pages/ViewInvoices'
 export default function App () {
   const token = localStorage.getItem('token')
   const user = token ? true : false
@@ -48,13 +49,13 @@ export default function App () {
                       {/* <Invoice /> */}
                       {user ? (
                         <>
-                          <UserDashboard />
+                          <SignUp />
                           {/* <Header />
                       <Invoice /> */}
                         </>
                       ) : (
                         <React.Fragment>
-                          <SignUp />
+                          <UserDashboard />
                           {/* <Header />
                       <Home />
                       <CallToAction />
@@ -86,6 +87,10 @@ export default function App () {
                   <Route
                     path='/users/dashboard/create-invoice'
                     element={<CreateInvoice />}
+                  />
+                  <Route
+                    path='/users/dashboard/invoice/:id'
+                    element={<ViewInvoices />}
                   />
                   <Route
                     path='/users/dashboard/plans'

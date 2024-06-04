@@ -1,0 +1,18 @@
+/* a4.css */
+.a4-page {
+  width: 8.27in; /* A4 width */
+  height: 11.69in; /* A4 height */
+  padding: 1in; /* Add some padding */
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  margin: 0 auto; /* Center the page */
+}
+
+@media print {
+  .a4-page {
+    box-shadow: none;
+    border: none;
+    margin: 0;
+  }
+}

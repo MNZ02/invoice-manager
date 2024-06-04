@@ -62,7 +62,6 @@ function History () {
 
   return (
     <div>
-      <h1>Invoices</h1>
       {invoices
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((invoice, index) => (

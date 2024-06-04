@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import DeleteModal from './DeleteModal'
 import { State } from '../context/stateContext'
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function TableForm () {
   const userId = getUserIdFromToken()
+
   const navigate = useNavigate()
   const {
     name,
@@ -60,7 +61,7 @@ export default function TableForm () {
 
   const handleAddInvoice = async () => {
     try {
-      const response = await api.post('/api/invoices', {
+      const response = await api.post(`/api/invoices/${userId}`, {
         user: userId,
         name: name,
         address,
@@ -84,7 +85,11 @@ export default function TableForm () {
       })
       navigate('/users/dashboard')
     } catch (error) {
-      console.error('Error adding invoice: ', error)
+      if (error.response && error.response.status == 403) {
+        toast(
+          'You have exceeded the limit of invoices you can create. Please upgrade your plan to create more invoices.'
+        )
+      }
     }
   }
 

@@ -15,7 +15,6 @@ export function PaymentProvider ({ children }) {
     const response = await api.put(`/api/users/${userId}`, {
       selectedPlan: planId
     })
-    console.log(response.data)
   }
 
   const subscribeUser = async (userId, planId) => {
@@ -37,8 +36,15 @@ export function PaymentProvider ({ children }) {
     }
   }
 
+  const resetInvoiceCount = async () => {
+    try {
+    } catch (error) {
+      console.error('Error resetting invoice count', error)
+    }
+    const response = await api.post(`/api/reset-invoice-count/${userId}`)
+  }
+
   const checkoutHandler = async (amount, plan) => {
-    console.log(plan._id)
     try {
       // Fetch the Razorpay key from the server
       const keyResponse = await api.get('/api/payment/getKey')
@@ -85,6 +91,7 @@ export function PaymentProvider ({ children }) {
             }
             await createTransaction(transactionData)
             await subscribeUser(userId, plan._id)
+            resetInvoiceCount()
 
             navigate(
               `/users/dashboard/payment/success?reference=${verifyResponse.data.payment_id}`

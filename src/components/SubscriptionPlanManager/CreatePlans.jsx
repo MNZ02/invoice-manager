@@ -123,6 +123,20 @@ const CreatePlans = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
+                <TextField
+                  {...register('maxInvoices', { required: true })}
+                  label='Max Invoices'
+                  variant='outlined'
+                  fullWidth
+                  error={!!errors.maxInvoices}
+                  helperText={
+                    errors.maxInvoices
+                      ? 'Maximum number of invoices is required'
+                      : ''
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel id='frequency-label'>Frequency</InputLabel>
                   <Controller

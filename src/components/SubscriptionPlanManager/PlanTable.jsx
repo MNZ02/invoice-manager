@@ -69,7 +69,6 @@ const PlanTable = ({ plans, fetchData }) => {
 
   const handleCreate = () => {
     navigate('/admin/plans/create')
-    console.log('Create new plan')
   }
 
   useEffect(() => {
@@ -102,6 +101,7 @@ const PlanTable = ({ plans, fetchData }) => {
               <TableCell>Description</TableCell>
               <TableCell>Price (INR)</TableCell>
               <TableCell>Validity</TableCell>
+              <TableCell>Max Invoices</TableCell>
               <TableCell>Frequency</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
@@ -155,6 +155,18 @@ const PlanTable = ({ plans, fetchData }) => {
                     />
                   ) : (
                     plan.validity
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editMode === index ? (
+                    <TextField
+                      type='number'
+                      name='maxInvoices'
+                      value={editedFields[index]?.maxInvoices || ''}
+                      onChange={e => handleChange(e, index)}
+                    />
+                  ) : (
+                    plan.maxInvoices
                   )}
                 </TableCell>
                 <TableCell>

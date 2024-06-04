@@ -13,9 +13,11 @@ import {
   Button,
   TablePagination
 } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/system'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import VisibilityIcon from '@mui/icons-material/Visibility'
 import SaveIcon from '@mui/icons-material/Save'
 
 const StyledTableContainer = styled(TableContainer)(() => ({
@@ -27,6 +29,8 @@ const StyledTableCell = styled(TableCell)(() => ({
 }))
 
 const InvoiceTable = ({ invoice, fetchData }) => {
+  const navigate = useNavigate()
+
   useEffect(() => {
     console.log(items)
   }, [])
@@ -34,7 +38,7 @@ const InvoiceTable = ({ invoice, fetchData }) => {
     name,
     items,
     totalAmount,
-    additionalNotes,
+    notes,
     invoiceNumber,
     invoiceDate,
     clientName,
@@ -45,7 +49,7 @@ const InvoiceTable = ({ invoice, fetchData }) => {
   const [editMode, setEditMode] = useState(false)
   const [editedFields, setEditedFields] = useState({
     user: name,
-    additionalNotes: additionalNotes,
+    notes,
     invoiceNumber: invoiceNumber,
     invoiceDate: invoiceDate,
     clientName: clientName,
@@ -86,6 +90,10 @@ const InvoiceTable = ({ invoice, fetchData }) => {
     } catch (error) {
       console.error('Error updating data: ', error)
     }
+  }
+
+  const handleView = () => {
+    navigate(`/users/dashboard/invoice/${invoice._id}`)
   }
 
   // Handler to update edited field value
@@ -149,13 +157,11 @@ const InvoiceTable = ({ invoice, fetchData }) => {
               <StyledTableCell>
                 {editMode ? (
                   <TextField
-                    value={editedFields.additionalNotes}
-                    onChange={e =>
-                      handleFieldChange('additionalNotes', e.target.value)
-                    }
+                    value={editedFields.notes}
+                    onChange={e => handleFieldChange('notes', e.target.value)}
                   />
                 ) : (
-                  'N/A'
+                  notes
                 )}
               </StyledTableCell>
               <StyledTableCell>
@@ -219,6 +225,10 @@ const InvoiceTable = ({ invoice, fetchData }) => {
                 )}
                 <IconButton aria-label='delete' onClick={handleDelete}>
                   <DeleteIcon />
+                </IconButton>
+
+                <IconButton aria-label='view' onClick={handleView}>
+                  <VisibilityIcon />
                 </IconButton>
               </StyledTableCell>
             </TableRow>

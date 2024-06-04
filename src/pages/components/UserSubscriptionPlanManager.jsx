@@ -179,6 +179,12 @@ function UserSubscriptionPlanManager () {
                     {plan.description}
                   </Typography>
                   <Typography
+                    variant='h6'
+                    sx={{ color: '#00153B', fontWeight: 'semi-bold', mb: 2 }}
+                  >
+                    {plan?.maxInvoices || 0} invoices
+                  </Typography>
+                  <Typography
                     variant='h5'
                     sx={{ color: '#00153B', fontWeight: 'semi-bold', mb: 2 }}
                   >

@@ -12,7 +12,6 @@ export default function Header () {
         const response = await api.get(`/api/users/${userId}`)
         const logoPath = response.data?.businessLogo
         setLogo(logoPath)
-        console.log(response.data)
       } catch (error) {
         console.error('Error fetching data: ', error)
       }
