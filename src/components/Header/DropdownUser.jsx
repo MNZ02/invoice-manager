@@ -3,10 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import UserOne from '../../images/user/user-01.png'
 import { logout } from '../../redux/authSlice'
-
+import { getUserRole } from '../../api/getUserRole'
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
 
+  const isUser = getUserRole()
   const trigger = useRef(null)
   const dropdown = useRef(null)
   const navigate = useNavigate()
@@ -83,7 +84,11 @@ const DropdownUser = () => {
           dropdownOpen === true ? 'block' : 'hidden'
         }`}
       >
-        <ul className='flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark'>
+        <ul
+          className={`${
+            isUser === 'user' ? 'block' : 'hidden'
+          }  flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark`}
+        >
           <li>
             <Link
               to='/users/dashboard/settings'

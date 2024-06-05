@@ -10,7 +10,8 @@ export default function Header () {
     const fetchData = async () => {
       try {
         const response = await api.get(`/api/users/${userId}`)
-        const logoPath = response.data?.businessLogo
+        console.log('response: ', response.data)
+        const logoPath = response?.data?.businessLogo
         setLogo(logoPath)
       } catch (error) {
         console.error('Error fetching data: ', error)
@@ -26,7 +27,7 @@ export default function Header () {
           <img
             src={import.meta.env.VITE_REACT_API_ENDPOINT + `/${logo}`}
             className='h-auto max-w-full'
-            alt='Logo'
+            alt='Your Business Logo'
           />
         ) : (
           <img

@@ -66,7 +66,12 @@ function History () {
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((invoice, index) => (
           <div key={index}>
-            <InvoiceTable invoice={invoice} fetchData={fetchData} />
+            <InvoiceTable
+              invoice={invoice}
+              fetchData={fetchData}
+              page={page}
+              setPage={setPage}
+            />
           </div>
         ))}
       <TablePagination

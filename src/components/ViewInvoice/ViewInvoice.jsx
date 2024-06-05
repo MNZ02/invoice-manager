@@ -106,7 +106,7 @@ function ViewInvoice () {
           content={() => componentRef.current}
         />
         <button
-          onClick={handleEmailClick}
+          onClick={handleWhatsAppClick}
           className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow-md flex items-center gap-2'
         >
           Share{' '}
@@ -173,8 +173,8 @@ function ViewInvoice () {
               </tr>
             </thead>
             {invoiceData?.items &&
-              invoiceData?.items.map(({ id, name, quantity, price }) => (
-                <React.Fragment key={id}>
+              invoiceData?.items.map(({ name, quantity, price }) => (
+                <React.Fragment key={name}>
                   <tbody>
                     <tr className='h-10'>
                       <td>{name}</td>

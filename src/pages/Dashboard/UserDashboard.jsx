@@ -34,7 +34,7 @@ function UserDashboard () {
 
   useEffect(() => {
     fetchSubscription()
-  }, [])
+  }, [isSubscriptionActive, userId])
   return (
     <DefaultusersLayout>
       <Breadcrumb pageName='Dashboard' />

@@ -9,7 +9,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Tab
+  TablePagination
 } from '@mui/material'
 import api from '../api/api'
 import { getUserIdFromToken } from '../api/userIdFromToken'
@@ -18,6 +18,8 @@ function PaymentHistory () {
   const userId = getUserIdFromToken()
   const [paymentHistory, setPaymentHistory] = useState([])
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
 
   const fetchPaymentHistory = async () => {
     try {
@@ -34,6 +36,15 @@ function PaymentHistory () {
   useEffect(() => {
     fetchPaymentHistory()
   }, [])
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
 
   if (loading) {
     return (
@@ -83,22 +94,34 @@ function PaymentHistory () {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paymentHistory.map(payment => (
-              <TableRow key={payment._id}>
-                <TableCell>{payment._id}</TableCell>
-                <TableCell>{payment.amount}</TableCell>
-                <TableCell>{payment.status}</TableCell>
-                <TableCell>
-                  {new Date(payment.createdAt).toLocaleString()}
-                </TableCell>
-                <TableCell>
-                  {new Date(payment.expiryDate).toLocaleDateString()}
-                </TableCell>
-              </TableRow>
-            ))}
+            {paymentHistory
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map(payment => (
+                <TableRow key={payment._id}>
+                  <TableCell>{payment._id}</TableCell>
+                  <TableCell>{payment.amount}</TableCell>
+                  <TableCell>{payment.status}</TableCell>
+                  <TableCell>
+                    {new Date(payment.createdAt).toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(payment.expiryDate).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component='div'
+        count={paymentHistory.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </Box>
   )
 }

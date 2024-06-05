@@ -12,7 +12,7 @@ const Header = props => {
     if (userRole === 'admin') {
       navigate('/admin')
     } else {
-      navigate('/')
+      navigate('/users/dashboard')
     }
   }
 

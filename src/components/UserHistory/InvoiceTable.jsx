@@ -28,7 +28,7 @@ const StyledTableCell = styled(TableCell)(() => ({
   borderBottom: 'none'
 }))
 
-const InvoiceTable = ({ invoice, fetchData }) => {
+const InvoiceTable = ({ invoice, fetchData, page, setPage }) => {
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const InvoiceTable = ({ invoice, fetchData }) => {
   // State to manage editable fields
   const [editMode, setEditMode] = useState(false)
   const [editedFields, setEditedFields] = useState({
-    user: name,
+    name,
     notes,
     invoiceNumber: invoiceNumber,
     invoiceDate: invoiceDate,
@@ -56,19 +56,6 @@ const InvoiceTable = ({ invoice, fetchData }) => {
     clientAddress: clientAddress,
     items: items.map(item => ({ ...item, isEditing: false })) // Add isEditing flag to each item
   })
-
-  // Pagination
-  const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage)
-  }
-
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
 
   // Handler to toggle edit mode
   const handleEdit = () => {
@@ -114,6 +101,9 @@ const InvoiceTable = ({ invoice, fetchData }) => {
       const response = await api.delete(`api/invoices/${invoiceId}`)
       console.log('Deleted data: ', response.data)
       fetchData()
+      if (page.length <= 0) {
+        setPage(page - 1)
+      }
     } catch (error) {
       console.error('Error deleting data: ', error)
     }

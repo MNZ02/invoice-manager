@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumbs'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { ClipLoader } from 'react-spinners'
 import DefaultusersLayout from '../layout/DefaultusersLayout'
 import api from '../api/api'
@@ -19,7 +21,8 @@ const Settings = () => {
     ifscCode: '',
     gst: '',
     address: '',
-    bankAccountHolderName: ''
+    bankAccountHolderName: '',
+    logo: null
   })
 
   useEffect(() => {
@@ -59,25 +62,54 @@ const Settings = () => {
   }
 
   function handleChange (e) {
-    const { name, value } = e.target
+    const { name, value, files } = e.target
 
-    setUserData(prevData => ({
-      ...prevData,
-      [name]: value
-    }))
+    if (name === 'logo') {
+      setUserData(prevData => ({
+        ...prevData,
+        logo: files[0]
+      }))
+    } else {
+      setUserData(prevData => ({
+        ...prevData,
+        [name]: value
+      }))
+    }
   }
 
   async function handleSave (e) {
     e.preventDefault()
     try {
-      await api.put(`/api/users/${userId}`, userData)
+      const formData = new FormData()
+      if (userData.logo) {
+        formData.append('logo', userData.logo) // Append logo file to FormData
+      }
+      // Append other user data fields to FormData
+      Object.keys(userData).forEach(key => {
+        if (key !== 'logo') {
+          formData.append(key, userData[key])
+        }
+      })
+
+      const response = await api.put(`/api/users/${userId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data' // Set proper content type for FormData
+        }
+      })
+
+      if (response) {
+        toast.success('User data updated successfully')
+        // Optionally fetch the updated user data here if needed
+      }
     } catch (error) {
       console.error('Error updating user data: ', error)
+      toast.error('Error updating user data')
     }
   }
 
   return (
     <DefaultusersLayout>
+      <ToastContainer position='top-right' theme='colored' />
       <div className='mx-auto max-w-4xl p-6'>
         <Breadcrumb pageName='Settings' />
 
@@ -251,10 +283,25 @@ const Settings = () => {
                       placeholder='Your Bank Account Holder Name'
                     />
                   </div>
+                  <div className='col-span-1'>
+                    <label
+                      className='block text-sm font-medium text-gray-700 dark:text-white mb-2'
+                      htmlFor='logo'
+                    >
+                      Logo
+                    </label>
+                    <input
+                      type='file'
+                      name='logo'
+                      id='logo'
+                      accept='image/*'
+                      onChange={handleChange}
+                      className='w-full'
+                    />
+                  </div>
                 </div>
 
                 <button
-                  onClick={handleSave}
                   className='mt-6 w-full bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white py-2 rounded-md font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
                   type='submit'
                 >

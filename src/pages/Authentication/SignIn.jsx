@@ -28,9 +28,6 @@ const SignIn = () => {
         import.meta.env.VITE_REACT_API_ENDPOINT + '/api/login',
         data
       )
-
-      console.log('Login successful', response.data)
-
       //set token
       const token = response.data.token
       const expiryDate = response.data.expiryDate
