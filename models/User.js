@@ -4,8 +4,7 @@ const { refreshToken } = require('../controllers/refreshTokenController')
 const userSchema = new mongoose.Schema({
   businessName: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   email: {
     type: String,

@@ -112,21 +112,54 @@ exports.getUserById = async (req, res) => {
 }
 
 // Update user by ID
-exports.updateUserById = async (req, res) => {
-  try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
-    })
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' })
-    }
-    res.status(200).json(updatedUser)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Internal server error' })
-  }
-}
+exports.updateUserById = [
+  upload.single('logo'),
+  async (req, res) => {
+    try {
+      const {
+        businessName,
+        email,
+        password,
+        contact,
+        bankName,
+        bankAccountNumber,
+        ifscCode,
+        GST,
+        address,
+        bankAccountHolderName
+      } = req.body
 
+      const businessLogo = req.file ? req.file.path : null
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          businessName,
+          email,
+          password,
+          contact,
+          bankName,
+          bankAccountNumber,
+          ifscCode,
+          GST,
+          address,
+          bankAccountHolderName,
+          businessLogo
+        },
+        {
+          new: true
+        }
+      )
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' })
+      }
+
+      res.status(200).json(updatedUser)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'Internal server error' })
+    }
+  }
+]
 // Delete user by ID
 exports.deleteUserById = async (req, res) => {
   try {
@@ -143,14 +176,6 @@ exports.deleteUserById = async (req, res) => {
 
 exports.registerUser = async (req, res) => {
   try {
-    // Validate request body
-    // const { username, email, password, planId } = req.body
-    // if (!username || !email || !password || !planId) {
-    //   return res.status(400).json({
-    //     message: 'Username, email, password, and plan ID are required'
-    //   })
-    // }
-
     const {
       businessName,
       email,
@@ -163,21 +188,10 @@ exports.registerUser = async (req, res) => {
       address,
       bankAccountHolderName
     } = req.body
-    if (
-      !businessName ||
-      !email ||
-      !password ||
-      !contact ||
-      !bankName ||
-      !bankAccountNumber ||
-      !ifscCode ||
-      !address ||
-      !bankAccountHolderName
-    ) {
+    if (!businessName || !email || !password || !contact) {
       return res.status(400).json({ message: 'All fields are required' })
     }
 
-    // Check if user with email already exists
     const existingUser = await User.findOne({ email })
     if (existingUser) {
       return res
@@ -187,10 +201,6 @@ exports.registerUser = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // // Handle logo upload
-    // const logoPath = req.file ? req.file.path : null
-
-    // Create user
     const newUser = new User({
       businessName,
       email,
@@ -203,25 +213,19 @@ exports.registerUser = async (req, res) => {
       address,
       bankAccountHolderName
     })
+
+    // If authentication successful, generate JWT token
+    const token = jwt.sign({ email: email }, process.env.JWT_SECRET_KEY, {
+      expiresIn: '4h'
+    })
     await newUser.save()
 
     res.json({
       message: 'User created successfully',
       user: newUser,
+      token: token,
       role: newUser.role
     })
-
-    // // Check if plan exists
-    // const plan = await Plan.findById(planId)
-    // if (!plan) {
-    //   return res.status(404).json({ message: 'Plan not found' })
-    // }
-
-    // // Create new user
-    // const newUser = new User({ username, email, password, plan: planId })
-    // await newUser.save()
-
-    // res.json({ message: 'User registered successfully', user: newUser })
   } catch (error) {
     console.error('Error registering user:', error)
     res.status(500).json({ message: 'Internal server error' })
